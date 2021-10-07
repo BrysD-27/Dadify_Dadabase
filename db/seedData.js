@@ -71,6 +71,13 @@ async function createTables () {
         //     name VARCHAR(255),
         //     desc
         // )
+
+            CREATE TABLE orders(
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id),
+                product_id INTEGER REFERENCES product(id),
+            )
+
     `)
 
     try {
