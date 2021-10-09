@@ -30,7 +30,7 @@ async function createTables () {
         $$ LANGUAGE plpgsql;
 
         CREATE TRIGGER set_timestamp
-        BEFORE UPDATE ON users,products
+        BEFORE UPDATE ON users, products
         FOR EACH ROW
         EXECUTE PROCEDURE trigger_set_timestamp();
 
