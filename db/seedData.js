@@ -21,6 +21,19 @@ async function createTables () {
     console.log('Creating tables...')
    
     await client.query(`
+        CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+        RETURNS TRIGGER AS $$
+        BEGIN
+        NEW.updated_at = NOW();
+        RETURN NEW;
+        END;
+        $$ LANGUAGE plpgsql;
+
+        CREATE TRIGGER set_timestamp
+        BEFORE UPDATE ON users,products
+        FOR EACH ROW
+        EXECUTE PROCEDURE trigger_set_timestamp();
+
         CREATE TABLE users(
             id SERIAL PRIMARY KEY,
             username VARCHAR(255) UNIQUE NOT NULL,
@@ -28,8 +41,8 @@ async function createTables () {
             first_name VARCHAR(255),
             last_name VARCHAR(255),
             phone INT,
-            created_at TIMESTAMP,
-            modified_at TIMESTAMP
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
 
         CREATE TABLE user_address(
@@ -61,9 +74,9 @@ async function createTables () {
             inventory_id INTEGER REFERENCES product_inventory(id),
             price DECIMAL(10,2),
             discount_id INTEGER REFERENCES discount(id),
-            created_at TIMESTAMP,
-            modified_at TIMESTAMP,
-            deleted_at TIMESTAMP
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
 
         // CREATE TABLE product_category(
