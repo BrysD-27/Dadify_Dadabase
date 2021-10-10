@@ -14,19 +14,9 @@ async function createTables () {
         $$ LANGUAGE plpgsql;
 
         CREATE TRIGGER set_timestamp
-        BEFORE UPDATE ON users,products
+        BEFORE UPDATE ON users, products
         FOR EACH ROW
         EXECUTE PROCEDURE trigger_set_timestamp();
-
-        CREATE TABLE users(
-            id SERIAL PRIMARY KEY,
-            username VARCHAR(255) UNIQUE NOT NULL,
-            password VARCHAR(255) NOT NULL,
-            first_name VARCHAR(255),
-            last_name VARCHAR(255),
-            phone INT,
-            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         `);
 
     try {
@@ -39,8 +29,8 @@ async function createTables () {
                 last_name VARCHAR(255),
                 email VARCHAR(255) UNIQUE NOT NULL, 
                 phone INT,
-                created_at TIMESTAMP,
-                modified_at TIMESTAMP
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
 
         CREATE TABLE product(
@@ -65,20 +55,6 @@ async function createTables () {
             //     account_no INT,
             //     expiry DATE
             // );
-
-            CREATE TABLE product(
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(255),
-                description VARCHAR,
-                sku VARCHAR(255),
-                category_id INTEGER REFERENCES product_categories(id),
-                inventory_id INTEGER REFERENCES product_inventory(id),
-                price DECIMAL(10,2),
-                discount_id INTEGER REFERENCES discount(id),
-                created_at TIMESTAMP,
-                modified_at TIMESTAMP,
-                deleted_at TIMESTAMP
-            );
 
             // CREATE TABLE product_category(
             //     id SERIAL PRIMARY KEY,
