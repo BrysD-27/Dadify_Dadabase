@@ -1,14 +1,14 @@
 const client = require("../../../client");
 
-async function updateProductItem({id, inventoryId, name, description, sku, price, modifiedAt}) {
+async function updateProductItem({inventory_id, name, description, sku, price}) {
     try {
         const {rows:[product]} = await client.query(`
             UPDATE product
             SET 
-                "inventoryId" = $2, name = $3, description = $4, sku = $5, price = $6, "modifiedAt" = $7
+                inventory_id = $2, name = $3, description = $4, sku = $5, price = $6
             WHERE id = $1
             RETURNING *;
-        `, [id, inventoryId, name, description, sku, price, modifiedAt]);
+        `, [inventory_id, name, description, sku, price]);
 
         return product;
         
