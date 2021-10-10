@@ -1,16 +1,16 @@
 const client = require("../../client");
 
-async function updateCart({id, userId, productId, quantity}) {
+async function updateCart({user_id, product_id, quantity}) {
     try {
         const {rows:[cart]} = await client.query(`
             UPDATE cart
             SET
-                "userId" = $2, 
-                "productId" = $3,
+                user_id = $2, 
+                product_id = $3,
                 quantity = $4
             WHERE id = $1
             RETURNING *;
-        `, [id, userId, productId, quantity]);
+        `, [user_id, product_id, quantity]);
 
         return cart;
     } catch (error) {

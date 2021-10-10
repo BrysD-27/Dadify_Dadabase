@@ -1,20 +1,18 @@
 const client = require("../../client");
 
-async function createCart({id, userId, productId, inventoryId}) {
+async function createCart({user_id, product_id, quantity}) {
 	try {
 		const {rows:[cart]} = await client.query(`
 				INSERT INTO cart (
-					id,
-					"userId",
-					"productId",
-					"inventoryId"
+					user_id,
+					product_id,
+					quantity
 				)
-				VALUES ($1, $2, $3, $4)
-				ON CONFLICT ("userId", "productId") DO NOTHING
+				VALUES ($1, $2, $3)
 				RETURNING *;
-        `, [id, userId, productId, inventoryId]);
+        `, [user_id, product_id, quantity]);
 
-		if (!productId) {
+		if (!product_id) {
 			return;
 		}
 
@@ -27,3 +25,5 @@ async function createCart({id, userId, productId, inventoryId}) {
 }
 
 module.exports = createCart;
+
+// ON CONFLICT (user_id, product_id) DO NOTHING -> Maybe use later?

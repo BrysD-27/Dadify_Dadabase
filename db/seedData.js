@@ -14,7 +14,7 @@ async function createTables () {
         $$ LANGUAGE plpgsql;
 
         CREATE TRIGGER set_timestamp
-        BEFORE UPDATE ON users, products
+        BEFORE UPDATE ON users, products, cart
         FOR EACH ROW
         EXECUTE PROCEDURE trigger_set_timestamp();
         `);
@@ -45,6 +45,15 @@ async function createTables () {
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+
+        CREATE TABLE cart (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(id),
+            product_id INTEGER REFERENCES product(id),
+            quantity INT,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
 
             // CREATE TABLE user_payment(
