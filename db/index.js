@@ -1,5 +1,6 @@
 const {client} = require('./client.js');
 
 module.exports = {
-    ...require("./product/product"),
+    ...require("./product/product.js"),
+    ...require("./cart/cart.js"),
 };

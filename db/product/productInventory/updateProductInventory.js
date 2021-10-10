@@ -1,13 +1,15 @@
 const client = require("../../../client");
 
-async function editProductInventory({id, quantity, createdAt, modifiedAt}) {
+async function updateProductInventory({id, quantity, modifiedAt}) {
     try {
         const {rows:[productInventory]} = await client.query(`
             UPDATE productInventory
-            SET quantity = $2, "createdAt" = $3, "modifiedAt" = $4
+            SET 
+                quantity = $2,  
+                "modifiedAt" = $3
             WHERE id = $1
             RETURNING *;
-        `, [id, quantity, createdAt, modifiedAt]);
+        `, [id, quantity, modifiedAt]);
 
         return productInventory;
         
@@ -17,4 +19,4 @@ async function editProductInventory({id, quantity, createdAt, modifiedAt}) {
     };
 };
 
-module.exports = editProductInventory;
+module.exports = updateProductInventory;
