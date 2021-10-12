@@ -42,6 +42,7 @@ async function createTables () {
             inventory_id INTEGER REFERENCES product_inventory(id),
             price DECIMAL(10,2),
             discount_id INTEGER REFERENCES discount(id),
+            created_by VARCHAR(255) REFERENCES users(username),
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
