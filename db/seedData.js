@@ -33,6 +33,14 @@ async function createTables () {
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
 
+            CREATE TABLE shopping_session(
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id),
+                total DECIMAL(10,2),
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )
+
         CREATE TABLE product(
             id SERIAL PRIMARY KEY,
             name VARCHAR(255),
@@ -56,14 +64,24 @@ async function createTables () {
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
 
-            // CREATE TABLE user_payment(
-            //     id SERIAL PRIMARY KEY,
-            //     user_id INTEGER REFERENCES users(id),
-            //     payment_type VARCHAR(255),
-            //     provider VARCHAR(255),
-            //     account_no INT,
-            //     expiry DATE
-            // );
+        CREATE TABLE cart_item(
+            id SERIAL PRIMARY KEY,
+            session_id INTEGER REFERENCES shopping_session(id),
+            product_id INTEGER REFERENCES product(id),
+            quantity INTEGER,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+
+            CREATE TABLE payment_details(
+                id SERIAL PRIMARY KEY,
+                order_id INTEGER REFERENCES orders(id),
+                amount INTEGER,
+                provider VARCHAR(255) NOT NULL,
+                status VARCHAR,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )
 
             // CREATE TABLE product_category(
             //     id SERIAL PRIMARY KEY,
@@ -71,11 +89,29 @@ async function createTables () {
             //     desc
             // )
 
-                CREATE TABLE orders(
-                    id SERIAL PRIMARY KEY,
-                    user_id INTEGER REFERENCES users(id),
-                    product_id INTEGER REFERENCES product(id),
-                )
+         CREATE TABLE orders(
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(id),
+            product_id INTEGER REFERENCES product(id),
+        )
+
+        CREATE TABLE order_details(
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(id),
+            total DECIMAL(10,2),
+            payment_id INTEGER REFERENCES payment_details(id),
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+
+        CREATE TABLE order_items(
+            id SERIAL PRIMARY KEY,
+            order_id INTEGER REFERENCES orders(id),
+            product_id INTEGER REFERENCES product(id),
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+
 
         `)
 
