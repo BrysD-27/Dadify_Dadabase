@@ -1,20 +1,15 @@
-const client = require("../../client");
+const client = require("../client");
 
-async function createCart({id, userId, productId, inventoryId}) {
+async function createCart({user_id, total}) {
 	try {
 		const {rows:[cart]} = await client.query(`
-				INSERT INTO cart_item (
-					quantity
+				INSERT INTO cart (
+					user_id,
+					total
 				)
-				VALUES ($1, $2, $3, $4)
-				ON CONFLICT ("userId", "productId") DO NOTHING
+				VALUES ($1, $2)
 				RETURNING *;
-        `, [id, userId, productId, inventoryId]);
-
-		if (!productId) {
-			return;
-		}
-
+        `, [user_id, total]);
 		return cart;
 
 	} catch (error) {
@@ -23,4 +18,44 @@ async function createCart({id, userId, productId, inventoryId}) {
 	}
 }
 
-module.exports = createCart;
+async function getCartAndItemsByUser(userId) {
+	try {
+		const {rows: [cart]} = await client.query(`
+			SELECT * 
+			FROM cart
+			WHERE user_id=${userId}
+			RETURNING *;
+		`);
+
+		const {rows:[items]} = await client.query(`
+			SELECT * FROM product
+			JOIN cart_item ON product_id = product.id
+			WHERE cart_id = ${cart.id}
+		`);
+		cart.items = items;
+		return cart;
+	} catch (error) {
+		throw error;
+	}
+}
+
+async function updateCartTotal({userId, total}) {
+	try {
+		const {rows: [cart]} = await client.query(`
+			UPDATE cart
+			SET total=${total}
+			WHERE user_id=${userId}
+			RETURNING *;
+		`);
+		return cart;
+	} catch (error) {
+		throw error;
+	}
+}
+
+module.exports = {
+	createCart, 
+	getCartAndItemsByUser,
+	updateCartTotal
+}
+
