@@ -23,7 +23,7 @@ async function updateUserAddress({id, addressLine1, addressLine2, city, postalCo
     try {
         const {rows: [updatedUserAddress]} = await client.query(`
             UPDATE user_address 
-            SET address_line1=$1, address_line2=$2, city=$3, postal_code=$4, country=$5, phone=$6
+            SET address_line1=$1, address_line2=$2, city=$3, postal_code=$4, country=$5, phone=$6, modified_at=NOW()
             WHERE user_id=${id}
             RETURNING *;
         `, [addressLine1, addressLine2, city, postalCode, country, phone]);
