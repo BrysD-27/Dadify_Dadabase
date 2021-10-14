@@ -30,7 +30,7 @@ async function getCartAndItemsByUser(userId) {
 		const {rows:[items]} = await client.query(`
 			SELECT * FROM product
 			JOIN cart_item ON product_id = product.id
-			WHERE cart_id = ${cart.id}
+			WHERE cart_id = ${cart.id};
 		`);
 		cart.items = items;
 		return cart;

@@ -46,10 +46,7 @@ async function createTables () {
             name VARCHAR(255),
             description VARCHAR,
             sku VARCHAR(255),
-            category_id INTEGER REFERENCES product_categories(id),
-            inventory_id INTEGER REFERENCES product_inventory(id),
             price DECIMAL(10,2),
-            discount_id INTEGER REFERENCES discount(id),
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

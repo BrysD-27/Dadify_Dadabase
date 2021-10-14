@@ -74,5 +74,6 @@ module.exports = {
     getCartItemById,
     updateCartItem,
     getCartItemById,
-    destroyCartItem
+    destroyCartItem,
+    getItemsByCartId
 }
