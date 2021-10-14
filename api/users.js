@@ -40,4 +40,18 @@ usersRouter.post('/login', async(req, res, next) => {
     }
 })
 
+usersRouter.get(`/profile/:userId`, async(req, res, next) => {
+    const { userId } = req.body;
+
+    try {
+        const chosenUser = await getUserById(userId);
+        const { username, first_name, last_name, email, phone} = chosenUser
+        res.send({username, first_name, last_name, email, phone})
+    } catch (error) {
+        throw error;
+    }
+
+})
+
+usersRouter.patch(``)
 module.exports = usersRouter;
