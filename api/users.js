@@ -27,7 +27,7 @@ usersRouter.post('/login', async(req, res, next) => {
     }
 
     try {
-        const user = await getUserByUsername(username);
+        const user = await getUser({username,password});
         const token = jwt.sign((user.id, user.username), process.env)
 
         if(user && user.password == password) {
@@ -40,11 +40,11 @@ usersRouter.post('/login', async(req, res, next) => {
     }
 })
 
-usersRouter.get(`/profile/:userId`, async(req, res, next) => {
-    const { userId } = req.body;
-
+usersRouter.get(`/:username`, async(req, res, next) => {
+    const username = req.params.username;
+    const { user } = req.body;
     try {
-        const chosenUser = await getUserById(userId);
+        const chosenUser = await getUserById(user);
         const { username, first_name, last_name, email, phone} = chosenUser
         res.send({username, first_name, last_name, email, phone})
     } catch (error) {
