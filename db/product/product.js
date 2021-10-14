@@ -4,23 +4,23 @@
 /* ----- PRODUCT ITEMS ----- */
 const createProductItem = require("./productItems/createProductItem.js");
 const deleteProductItem = require("./productItems/deleteProductItem.js");
-const editProductItem = require("./productItems/editProductItem.js");
+const updateProductItem = require("./productItems/updateProductItem.js");
 const getAllProductItems = require("./productItems/getAllProductItems.js");
 const getProductItemById = require("./productItems/getProductItemById.js");
 
 /* ----- PRODUCT INVENTORY ----- */
 const createProductInventory = require("./productInventory/createProductInventory.js");
 const deleteProductInventory = require("./productInventory/deleteProductInventory.js");
-const editProductInventory = require("./productInventory/editProductInventory.js");
+const updateProductInventory = require("./productInventory/updateProductInventory.js");
 
 
 module.exports = {
     createProductItem,
     deleteProductItem,
-    editProductItem,
+    updateProductItem,
     getAllProductItems,
     getProductItemById,
     createProductInventory,
-    editProductInventory,
+    updateProductInventory,
     deleteProductInventory,
 }
