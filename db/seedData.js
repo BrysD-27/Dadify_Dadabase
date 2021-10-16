@@ -48,6 +48,7 @@ async function createTables () {
             description VARCHAR,
             sku VARCHAR(255),
             price DECIMAL(10,2),
+            creator_id INTEGER REFERENCES users(id),
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

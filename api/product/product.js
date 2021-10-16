@@ -1,13 +1,15 @@
 const {Router} = require("express");
 const apiGetAllProducts = require("./getAllProducts");
+const apiGetAllProductsByUser = require("./getAllProductsByUser");
 const apiCreatingProduct = require("./createProduct");
 const apiPatchProduct = require("./patchProduct");
 const apiDeleteProduct = require("./deleteProduct");
 
 const productsRouter = Router();
 productsRouter.get("/", apiGetAllProducts);
+productsRouter.get("/:products/username", apiGetAllProductsByUser);
 productsRouter.post("/", apiCreatingProduct);
-productsRouter.patch("/:routineId", apiPatchProduct);
-productsRouter.delete("/:routineId", apiDeleteProduct);
+productsRouter.patch("/:productId", apiPatchProduct);
+productsRouter.delete("/:productId", apiDeleteProduct);
 
 module.exports = productsRouter;
