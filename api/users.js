@@ -40,7 +40,7 @@ usersRouter.post('/login', async(req, res, next) => {
     }
 })
 
-usersRouter.get(`/:username`, async(req, res, next) => {
+usersRouter.get(`/users/:username`, async(req, res, next) => {
     const username = req.params.username;
     const { user } = req.body;
     try {
@@ -53,5 +53,4 @@ usersRouter.get(`/:username`, async(req, res, next) => {
 
 })
 
-usersRouter.patch(``)
 module.exports = usersRouter;
