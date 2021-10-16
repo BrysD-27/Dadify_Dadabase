@@ -43,7 +43,7 @@ async function updateCartTotal({userId, total}) {
 	try {
 		const {rows: [cart]} = await client.query(`
 			UPDATE cart
-			SET total=${total}
+			SET total=${total}, modified_at= NOW()
 			WHERE user_id=${userId}
 			RETURNING *;
 		`);

@@ -47,11 +47,6 @@ async function createTables () {
             description VARCHAR,
             sku VARCHAR(255),
             price DECIMAL(10,2),
-<<<<<<< HEAD
-            discount_id INTEGER REFERENCES discount(id),
-            created_by VARCHAR(255) REFERENCES users(username),
-=======
->>>>>>> 5fa5e96da4b3337a8d657a4cbe3a93cc802d4646
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -85,8 +80,11 @@ async function createTables () {
          CREATE TABLE orders(
             id SERIAL PRIMARY KEY,
             user_id INTEGER REFERENCES users(id),
-            product_id INTEGER REFERENCES product(id),
-        )
+            total DECIMAL(10, 2),
+            status VARCHAR(255),
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
 
         // CREATE TABLE order_details(
         //     id SERIAL PRIMARY KEY,
@@ -101,9 +99,10 @@ async function createTables () {
             id SERIAL PRIMARY KEY,
             order_id INTEGER REFERENCES orders(id),
             product_id INTEGER REFERENCES product(id),
+            quantity INTEGER,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        )
+        );
 
 
         `)
