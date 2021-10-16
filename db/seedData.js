@@ -1,23 +1,45 @@
 const client = require('./client');
+const {
+    createUser,
+    createProductItem,
+    createCart,
+    addItemToCart,
+} = require('./index');
 
+async function dropTables() {
+	try {
+		console.log('Dropping All Tables...');
+		await client.query(`
+            DROP TABLE IF EXISTS order_items;
+            DROP TABLE IF EXISTS orders;
+			DROP TABLE IF EXISTS cart_item;
+			DROP TABLE IF EXISTS product;  
+			DROP TABLE IF EXISTS cart;  
+			DROP TABLE IF EXISTS users;
+		`);
+	} catch (error) {
+		console.error("Error dropping tables!");
+		throw error;
+	}
+}
 
 async function createTables () {
     console.log('Creating tables...')
    
-    await client.query(`
-        CREATE OR REPLACE FUNCTION trigger_set_timestamp()
-        RETURNS TRIGGER AS $$
-        BEGIN
-        NEW.modified_at = NOW();
-        RETURN NEW;
-        END;
-        $$ LANGUAGE plpgsql;
+    // await client.query(`
+    //     CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+    //     RETURNS TRIGGER AS $$
+    //     BEGIN
+    //     NEW.modified_at = NOW();
+    //     RETURN NEW;
+    //     END;
+    //     $$ LANGUAGE plpgsql;
 
-        CREATE TRIGGER set_timestamp
-        BEFORE UPDATE ON users
-        FOR EACH ROW
-        EXECUTE PROCEDURE trigger_set_timestamp();
-        `);
+    //     CREATE TRIGGER set_timestamp
+    //     BEFORE UPDATE ON users
+    //     FOR EACH ROW
+    //     EXECUTE PROCEDURE trigger_set_timestamp();
+    // `);
 
     try {
         await client.query(`
@@ -41,102 +63,123 @@ async function createTables () {
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
 
-        CREATE TABLE product(
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(255),
-            description VARCHAR,
-            sku VARCHAR(255),
-            price DECIMAL(10,2),
-            creator_id INTEGER REFERENCES users(id),
-            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        );
+            CREATE TABLE product(
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255),
+                description VARCHAR,
+                sku VARCHAR(255),
+                price DECIMAL(10,2),
+                creator_id INTEGER REFERENCES users(id),
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );
 
-        CREATE TABLE cart_item(
-            id SERIAL PRIMARY KEY,
-            cart_id INTEGER REFERENCES cart(id),
-            product_id INTEGER REFERENCES product(id),
-            quantity INTEGER,
-            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        );
+            CREATE TABLE cart_item(
+                id SERIAL PRIMARY KEY,
+                cart_id INTEGER REFERENCES cart(id),
+                product_id INTEGER REFERENCES product(id),
+                quantity INTEGER,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );
 
-            // CREATE TABLE payment_details(
-            //     id SERIAL PRIMARY KEY,
-            //     order_id INTEGER REFERENCES orders(id),
-            //     amount INTEGER,
-            //     provider VARCHAR(255) NOT NULL,
-            //     status VARCHAR,
-            //     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            //     modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-            // )
+            CREATE TABLE orders(
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id),
+                product_id INTEGER REFERENCES product(id)
+            );
 
-            // CREATE TABLE product_category(
-            //     id SERIAL PRIMARY KEY,
-            //     name VARCHAR(255),
-            //     desc
-            // )
-
-         CREATE TABLE orders(
-            id SERIAL PRIMARY KEY,
-            user_id INTEGER REFERENCES users(id),
-            product_id INTEGER REFERENCES product(id),
-        )
-
-        // CREATE TABLE order_details(
-        //     id SERIAL PRIMARY KEY,
-        //     user_id INTEGER REFERENCES users(id),
-        //     total DECIMAL(10,2),
-        //     payment_id INTEGER REFERENCES payment_details(id),
-        //     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-        //     modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        // );
-
-        CREATE TABLE order_items(
-            id SERIAL PRIMARY KEY,
-            order_id INTEGER REFERENCES orders(id),
-            product_id INTEGER REFERENCES product(id),
-            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        )
-
-
+            CREATE TABLE order_items(
+                id SERIAL PRIMARY KEY,
+                order_id INTEGER REFERENCES orders(id),
+                product_id INTEGER REFERENCES product(id),
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );
         `)
+
+        await client.query(`
+            CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+            RETURNS TRIGGER AS $$
+            BEGIN
+            NEW.modified_at = NOW();
+            RETURN NEW;
+            END;
+            $$ LANGUAGE plpgsql;
+
+            CREATE TRIGGER set_timestamp
+            BEFORE UPDATE ON users
+            FOR EACH ROW
+            EXECUTE PROCEDURE trigger_set_timestamp();
+        `);
 
     } catch (error) {
         console.error(error);
     }
 }
 
-
 /* Initial user data seeding into tables */
-
 async function createInitialUsers() {
     console.log('Creating dummy list of users...')
     try {
         const usersToCreate = [
-            {username:'SmarmyTerrier', password:'dummypassword', first_name:'John', last_name:'Doe', phone: 1111111111},
-            {username:'MiyagiSan14', password:'dummypassword', first_name:'Tom', last_name:'Collins', phone: 1111111112},
-            {username:'TebCrux', password:'dummypassword', first_name:'Ted', last_name:'Cruz', phone: 1111111113},
-            {username:'JSeed2', password:'dummypassword', first_name:'Joseph', last_name:'Seed', phone: 1111111114},
-            {username:'BloodyBookworm', password:'dummypassword', first_name:'Bernie', last_name:'Sanders', phone: 1111111115},
-            {username:'punctuallyqueasy', password:'dummypassword', first_name:'Kamala', last_name:'Harris', phone: 1111111116},
-            {username:'Yearly_Helper', password:'dummypassword', first_name:'James', last_name:'Inhofe', phone: 1111111117},
-            {username:'LilCrunk', password:'dummypassword', first_name:'Joseph', last_name:'Biden', phone: 1111111118},
-            {username:'DavetheGoat', password:'dummypassword', first_name:'David', last_name:'Beckham', phone: 1111111119},
-            {username:'JustTim', password:'dummypassword', first_name:'Tim', last_name:'Sweeny', phone: 1111111121},
-            {username:'Froge37', password:'dummypassword', first_name:'Dermott', last_name:'Smith', phone: 1111111131},
-            {username:'NattheCat', password:'dummypassword', first_name:'Natalie', last_name:'Felonius', phone: 1111111141},
-            {username:'QuizicallyYours', password:'dummypassword', first_name:'Pat', last_name:'Sajak', phone: 1111111151},
-            {username:'Boomer-Sooner-12', password:'dummypassword', first_name:'Bob', last_name:'Stoops', phone: 1111111161},
-            {username:'PistolsFiring', password:'dummypassword', first_name:'Michael', last_name:'Gundy', phone: 1111111171}
+            {username:'SmarmyTerrier', password:'dummypassword', first_name:'John', last_name:'Doe',email: 'user1@testmail.com',  phone: 1111111111},
+            {username:'MiyagiSan14', password:'dummypassword', first_name:'Tom', last_name:'Collins',email: 'user2@testmail.com', phone: 1111111112},
+            {username:'TebCrux', password:'dummypassword', first_name:'Ted', last_name:'Cruz',email: 'user3@testmail.com', phone: 1111111113},
+            {username:'JSeed2', password:'dummypassword', first_name:'Joseph', last_name:'Seed',email: 'user4@testmail.com', phone: 1111111114},
+            {username:'BloodyBookworm', password:'dummypassword', first_name:'Bernie', last_name:'Sanders',email: 'user5@testmail.com', phone: 1111111115},
+            {username:'punctuallyqueasy', password:'dummypassword', first_name:'Kamala', last_name:'Harris',email: 'user6@testmail.com', phone: 1111111116},
+            {username:'Yearly_Helper', password:'dummypassword', first_name:'James', last_name:'Inhofe',email: 'user7@testmail.com', phone: 1111111117},
+            {username:'LilCrunk', password:'dummypassword', first_name:'Joseph', last_name:'Biden',email: 'user8@testmail.com', phone: 1111111118},
+            {username:'DavetheGoat', password:'dummypassword', first_name:'David', last_name:'Beckham',email: 'user9@testmail.com', phone: 1111111119},
+            {username:'JustTim', password:'dummypassword', first_name:'Tim', last_name:'Sweeny',email: 'user10@testmail.com', phone: 1111111121},
+            {username:'Froge37', password:'dummypassword', first_name:'Dermott', last_name:'Smith',email: 'user11@testmail.com', phone: 1111111131},
+            {username:'NattheCat', password:'dummypassword', first_name:'Natalie', last_name:'Felonius',email: 'user12@testmail.com', phone: 1111111141},
+            {username:'QuizicallyYours', password:'dummypassword', first_name:'Pat', last_name:'Sajak',email: 'user13@testmail.com', phone: 1111111151},
+            {username:'Boomer-Sooner-12', password:'dummypassword', first_name:'Bob', last_name:'Stoops',email: 'user14@testmail.com', phone: 1111111161},
+            {username:'PistolsFiring', password:'dummypassword', first_name:'Michael', last_name:'Gundy',email: 'user15@testmail.com', phone: 1111111171}
         ];
 
         const users = await Promise.all(usersToCreate.map(createUser));
         console.log('Dummy user list created!')
+        console.log(users);
     } catch (error) {
         console.log('Error creating dummy users!')
+        throw error;
+    }
+}
+
+async function createInitialCart() {
+    try {
+        console.log('starting to create cart...');
+
+        const cartsToCreate = [
+            {user_id: 1, total: 0.00 },
+            {user_id: 2, total: 0.00 }
+        ]
+        const carts = await Promise.all(cartsToCreate.map(cart => createCart(cart)));
+        console.log('Carts Created: ', carts)
+        console.log('Finished creating carts.')
+    } catch (error) {
+        console.error("Error creating carts.");
+        throw error;
+    }
+}
+
+async function createInitialCartItem() {
+    try {
+        console.log('starting to create cart...');
+
+        const cartItemsToAdd = [
+            {cart_id: 1, product_id: 1, quantity: 3},
+            {cart_id: 2, product_id: 2, quantity: 6}
+        ]
+        const cartItem = await Promise.all(cartItemsToAdd.map(cartItem => addItemToCart(cartItem)));
+        console.log('Cart Items Added: ', cartItem)
+        console.log('Finished adding cart items.')
+    } catch (error) {
+        console.error("Error adding cart items.");
         throw error;
     }
 }
@@ -186,7 +229,32 @@ async function createInitialProducts() {
             {name:'"Dad" coffee mug', description:'placeholder_description', sku:'039', category_id:000037, inventory_id:39, price:12.21},
             {name:'"Hi Hungry, I\'m Dad: 1001 Dad Jokes"', description:'placeholder_description', sku:'040', category_id:000040, inventory_id:40, price:13.41}
         ]
+        const products = await Promise.all(productsToCreate.map(createProductItem));
+
+		console.log('products created:');
+		console.log(products);
+		console.log('Finished creating products!');
     } catch (error) {
+        console.error("Error creating products.");
         throw error;
     }
 }
+
+async function rebuildDB() {
+	try {
+		client.connect();
+        await dropTables();
+		await createTables();
+		await createInitialUsers();
+        await createInitialCart();
+		await createInitialProducts();
+        await createInitialCartItem();
+	} catch (error) {
+		console.log('Error during rebuildDB')
+		throw error;
+	}
+}
+
+module.exports = {
+	rebuildDB
+};

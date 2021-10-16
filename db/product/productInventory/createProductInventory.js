@@ -1,4 +1,4 @@
-const client = require("../../../client");
+const client = require("../../client");
 
 async function createProductInventory({id, quantity, created_at}) {
     try {

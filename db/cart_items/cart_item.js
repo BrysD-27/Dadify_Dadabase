@@ -3,7 +3,7 @@ const client = require('../client');
 async function addItemToCart({cartId, proudctId, quantity}) {
     try {
         const {rows: [cartItem]} = await client.query(`
-            INSERT cart_item(cart_id, product_id, quantity)
+            INSERT INTO cart_item(cart_id, product_id, quantity)
             VALUES($1, $2, $3)
             RETURNING *;
         `, [cartId, proudctId, quantity]);
