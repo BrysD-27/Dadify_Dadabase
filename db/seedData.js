@@ -62,6 +62,16 @@ async function createTables () {
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
 
+        CREATE TABLE reviews(
+            id SERIAL PRIMARY KEY,  
+            title VARCHAR(255) NOT NULL,
+            content VARCHAR(500);
+            product_name INTEGER REFERENCES product(name),
+            review_creator INTEGER REFERENCES users(username),
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+
             // CREATE TABLE payment_details(
             //     id SERIAL PRIMARY KEY,
             //     order_id INTEGER REFERENCES orders(id),
