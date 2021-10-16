@@ -102,21 +102,21 @@ async function createInitialUsers() {
     console.log('Creating dummy list of users...')
     try {
         const usersToCreate = [
-            {username:'SmarmyTerrier', password:'dummypassword', first_name:'John', last_name:'Doe', phone: 1111111111},
-            {username:'MiyagiSan14', password:'dummypassword', first_name:'Tom', last_name:'Collins', phone: 1111111112},
-            {username:'TebCrux', password:'dummypassword', first_name:'Ted', last_name:'Cruz', phone: 1111111113},
-            {username:'JSeed2', password:'dummypassword', first_name:'Joseph', last_name:'Seed', phone: 1111111114},
-            {username:'BloodyBookworm', password:'dummypassword', first_name:'Bernie', last_name:'Sanders', phone: 1111111115},
-            {username:'punctuallyqueasy', password:'dummypassword', first_name:'Kamala', last_name:'Harris', phone: 1111111116},
-            {username:'Yearly_Helper', password:'dummypassword', first_name:'James', last_name:'Inhofe', phone: 1111111117},
-            {username:'LilCrunk', password:'dummypassword', first_name:'Joseph', last_name:'Biden', phone: 1111111118},
-            {username:'DavetheGoat', password:'dummypassword', first_name:'David', last_name:'Beckham', phone: 1111111119},
-            {username:'JustTim', password:'dummypassword', first_name:'Tim', last_name:'Sweeny', phone: 1111111121},
-            {username:'Froge37', password:'dummypassword', first_name:'Dermott', last_name:'Smith', phone: 1111111131},
-            {username:'NattheCat', password:'dummypassword', first_name:'Natalie', last_name:'Felonius', phone: 1111111141},
-            {username:'QuizicallyYours', password:'dummypassword', first_name:'Pat', last_name:'Sajak', phone: 1111111151},
-            {username:'Boomer-Sooner-12', password:'dummypassword', first_name:'Bob', last_name:'Stoops', phone: 1111111161},
-            {username:'PistolsFiring', password:'dummypassword', first_name:'Michael', last_name:'Gundy', phone: 1111111171}
+            {username:'SmarmyTerrier', password:'dummypassword', first_name:'John', last_name:'Doe',email: 'user1@testmail.com',  phone: 1111111111},
+            {username:'MiyagiSan14', password:'dummypassword', first_name:'Tom', last_name:'Collins',email: 'user2@testmail.com', phone: 1111111112},
+            {username:'TebCrux', password:'dummypassword', first_name:'Ted', last_name:'Cruz',email: 'user3@testmail.com', phone: 1111111113},
+            {username:'JSeed2', password:'dummypassword', first_name:'Joseph', last_name:'Seed',email: 'user4@testmail.com', phone: 1111111114},
+            {username:'BloodyBookworm', password:'dummypassword', first_name:'Bernie', last_name:'Sanders',email: 'user5@testmail.com', phone: 1111111115},
+            {username:'punctuallyqueasy', password:'dummypassword', first_name:'Kamala', last_name:'Harris',email: 'user6@testmail.com', phone: 1111111116},
+            {username:'Yearly_Helper', password:'dummypassword', first_name:'James', last_name:'Inhofe',email: 'user7@testmail.com', phone: 1111111117},
+            {username:'LilCrunk', password:'dummypassword', first_name:'Joseph', last_name:'Biden',email: 'user8@testmail.com', phone: 1111111118},
+            {username:'DavetheGoat', password:'dummypassword', first_name:'David', last_name:'Beckham',email: 'user9@testmail.com', phone: 1111111119},
+            {username:'JustTim', password:'dummypassword', first_name:'Tim', last_name:'Sweeny',email: 'user10@testmail.com', phone: 1111111121},
+            {username:'Froge37', password:'dummypassword', first_name:'Dermott', last_name:'Smith',email: 'user11@testmail.com', phone: 1111111131},
+            {username:'NattheCat', password:'dummypassword', first_name:'Natalie', last_name:'Felonius',email: 'user12@testmail.com', phone: 1111111141},
+            {username:'QuizicallyYours', password:'dummypassword', first_name:'Pat', last_name:'Sajak',email: 'user13@testmail.com', phone: 1111111151},
+            {username:'Boomer-Sooner-12', password:'dummypassword', first_name:'Bob', last_name:'Stoops',email: 'user14@testmail.com', phone: 1111111161},
+            {username:'PistolsFiring', password:'dummypassword', first_name:'Michael', last_name:'Gundy',email: 'user15@testmail.com', phone: 1111111171}
         ];
 
         const users = await Promise.all(usersToCreate.map(createUser));
