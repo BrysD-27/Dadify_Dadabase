@@ -1,3 +1,4 @@
+const { createProductItem } = require('.');
 const client = require('./client');
 
 
@@ -61,6 +62,16 @@ async function createTables () {
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
+
+        CREATE TABLE reviews(
+            id SERIAL PRIMARY KEY,  
+            title VARCHAR(255) NOT NULL,
+            content VARCHAR(500);
+            product_name INTEGER REFERENCES product(name),
+            review_creator INTEGER REFERENCES users(username),
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
 
             // CREATE TABLE payment_details(
             //     id SERIAL PRIMARY KEY,
@@ -135,6 +146,7 @@ async function createInitialUsers() {
 
         const users = await Promise.all(usersToCreate.map(createUser));
         console.log('Dummy user list created!')
+        return users;
     } catch (error) {
         console.log('Error creating dummy users!')
         throw error;
@@ -186,7 +198,20 @@ async function createInitialProducts() {
             {name:'"Dad" coffee mug', description:'placeholder_description', sku:'039', category_id:000037, inventory_id:39, price:12.21},
             {name:'"Hi Hungry, I\'m Dad: 1001 Dad Jokes"', description:'placeholder_description', sku:'040', category_id:000040, inventory_id:40, price:13.41}
         ]
+
+        const products = await Promise.all(productsToCreate.map(createProductItem))
+        console.log(`Dummy list of items created!`);
+        return products;
     } catch (error) {
         throw error;
     }
+}
+
+async function createDB( ) {
+    createInitialProducts;
+    createInitialUsers();
+}
+
+module.exports = {
+    createDB
 }
