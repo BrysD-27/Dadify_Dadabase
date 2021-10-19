@@ -38,15 +38,15 @@ reviewsRouter.delete('/reviews', async (req, res, next) => {
     }
 });
 
-// reviewsRouter.get('/reviews/:userId', async (req, res, next) => {
-//     const {review_creator} = req.params;
-
-//     try {
-//         const userReviews = await getReviewsByUsername(review_creator);
-//     } catch (error) {
-//         throw error
-//     }
-// })
+reviewsRouter.get('/reviews/:userId', async (req, res, next) => {
+    const {review_creator} = req.params;
+    try {
+        const userReviews = await getReviewsByUsername(review_creator);
+        res.send(userReviews);
+    } catch (error) {
+        throw error
+    }
+});
 
 reviewsRouter.get('/reviews', async (req, res, next) => {
     try {
@@ -57,7 +57,7 @@ reviewsRouter.get('/reviews', async (req, res, next) => {
     }
 })
 
-reviewsRouter.patch('/:reviewId', async (req, res, next) => {
+reviewsRouter.patch('/reviews/:reviewId', async (req, res, next) => {
     const {review_id} = req.params;
     const review = await getReviewById(review_id);
     const { title, content, product_name} = req.body;

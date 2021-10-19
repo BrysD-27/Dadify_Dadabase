@@ -84,7 +84,7 @@ async function createTables () {
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
-
+            
             CREATE TABLE orders(
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER REFERENCES users(id),
@@ -114,7 +114,35 @@ async function createTables () {
             FOR EACH ROW
             EXECUTE PROCEDURE trigger_set_timestamp();
         `);
+      
+            CREATE TABLE reviews(
+                id SERIAL PRIMARY KEY,  
+                title VARCHAR(255) NOT NULL,
+                content VARCHAR(500);
+                product_name INTEGER REFERENCES product(name),
+                review_creator INTEGER REFERENCES users(username),
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )
 
+
+
+            CREATE TABLE orders(
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id),
+                product_id INTEGER REFERENCES product(id),
+            )
+
+
+            CREATE TABLE order_items(
+                id SERIAL PRIMARY KEY,
+                order_id INTEGER REFERENCES orders(id),
+                product_id INTEGER REFERENCES product(id),
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )
+            `);
+            
     } catch (error) {
         console.error(error);
     }
