@@ -1,24 +1,46 @@
-const { createProductItem } = require('.');
-const client = require('./client');
 
+const client = require('./client');
+const {
+    createUser,
+    createProductItem,
+    createCart,
+    addItemToCart,
+} = require('./index');
+
+async function dropTables() {
+	try {
+		console.log('Dropping All Tables...');
+		await client.query(`
+            DROP TABLE IF EXISTS order_items;
+            DROP TABLE IF EXISTS orders;
+			DROP TABLE IF EXISTS cart_item;
+			DROP TABLE IF EXISTS product;  
+			DROP TABLE IF EXISTS cart;  
+			DROP TABLE IF EXISTS users;
+		`);
+	} catch (error) {
+		console.error("Error dropping tables!");
+		throw error;
+	}
+}
 
 async function createTables () {
     console.log('Creating tables...')
    
-    await client.query(`
-        CREATE OR REPLACE FUNCTION trigger_set_timestamp()
-        RETURNS TRIGGER AS $$
-        BEGIN
-        NEW.modified_at = NOW();
-        RETURN NEW;
-        END;
-        $$ LANGUAGE plpgsql;
+    // await client.query(`
+    //     CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+    //     RETURNS TRIGGER AS $$
+    //     BEGIN
+    //     NEW.modified_at = NOW();
+    //     RETURN NEW;
+    //     END;
+    //     $$ LANGUAGE plpgsql;
 
-        CREATE TRIGGER set_timestamp
-        BEFORE UPDATE ON users
-        FOR EACH ROW
-        EXECUTE PROCEDURE trigger_set_timestamp();
-        `);
+    //     CREATE TRIGGER set_timestamp
+    //     BEFORE UPDATE ON users
+    //     FOR EACH ROW
+    //     EXECUTE PROCEDURE trigger_set_timestamp();
+    // `);
 
     try {
         await client.query(`
@@ -62,7 +84,37 @@ async function createTables () {
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
+            
+            CREATE TABLE orders(
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id),
+                product_id INTEGER REFERENCES product(id)
+            );
 
+            CREATE TABLE order_items(
+                id SERIAL PRIMARY KEY,
+                order_id INTEGER REFERENCES orders(id),
+                product_id INTEGER REFERENCES product(id),
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );
+        `)
+
+        await client.query(`
+            CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+            RETURNS TRIGGER AS $$
+            BEGIN
+            NEW.modified_at = NOW();
+            RETURN NEW;
+            END;
+            $$ LANGUAGE plpgsql;
+
+            CREATE TRIGGER set_timestamp
+            BEFORE UPDATE ON users
+            FOR EACH ROW
+            EXECUTE PROCEDURE trigger_set_timestamp();
+        `);
+      
             CREATE TABLE reviews(
                 id SERIAL PRIMARY KEY,  
                 title VARCHAR(255) NOT NULL,
@@ -90,14 +142,13 @@ async function createTables () {
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             )
             `);
+            
     } catch (error) {
         console.error(error);
     }
 }
 
-
 /* Initial user data seeding into tables */
-
 async function createInitialUsers() {
     console.log('Creating dummy list of users...')
     try {
@@ -121,9 +172,43 @@ async function createInitialUsers() {
 
         const users = await Promise.all(usersToCreate.map(createUser));
         console.log('Dummy user list created!')
-        return users;
+        console.log(users);
     } catch (error) {
         console.log('Error creating dummy users!')
+        throw error;
+    }
+}
+
+async function createInitialCart() {
+    try {
+        console.log('starting to create cart...');
+
+        const cartsToCreate = [
+            {user_id: 1, total: 0.00 },
+            {user_id: 2, total: 0.00 }
+        ]
+        const carts = await Promise.all(cartsToCreate.map(cart => createCart(cart)));
+        console.log('Carts Created: ', carts)
+        console.log('Finished creating carts.')
+    } catch (error) {
+        console.error("Error creating carts.");
+        throw error;
+    }
+}
+
+async function createInitialCartItem() {
+    try {
+        console.log('starting to create cart...');
+
+        const cartItemsToAdd = [
+            {cart_id: 1, product_id: 1, quantity: 3},
+            {cart_id: 2, product_id: 2, quantity: 6}
+        ]
+        const cartItem = await Promise.all(cartItemsToAdd.map(cartItem => addItemToCart(cartItem)));
+        console.log('Cart Items Added: ', cartItem)
+        console.log('Finished adding cart items.')
+    } catch (error) {
+        console.error("Error adding cart items.");
         throw error;
     }
 }
@@ -173,20 +258,32 @@ async function createInitialProducts() {
             {name:'"Dad" coffee mug', description:'placeholder_description', sku:'039', category_id:000037, inventory_id:39, price:12.21},
             {name:'"Hi Hungry, I\'m Dad: 1001 Dad Jokes"', description:'placeholder_description', sku:'040', category_id:000040, inventory_id:40, price:13.41}
         ]
+        const products = await Promise.all(productsToCreate.map(createProductItem));
 
-        const products = await Promise.all(productsToCreate.map(createProductItem))
-        console.log(`Dummy list of items created!`);
-        return products;
+		console.log('products created:');
+		console.log(products);
+		console.log('Finished creating products!');
     } catch (error) {
+        console.error("Error creating products.");
         throw error;
     }
 }
 
-async function createDB( ) {
-    createInitialProducts;
-    createInitialUsers();
+async function rebuildDB() {
+	try {
+		client.connect();
+        await dropTables();
+		await createTables();
+		await createInitialUsers();
+        await createInitialCart();
+		await createInitialProducts();
+        await createInitialCartItem();
+	} catch (error) {
+		console.log('Error during rebuildDB')
+		throw error;
+	}
 }
 
 module.exports = {
-    createDB
-}
+	rebuildDB
+};
