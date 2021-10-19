@@ -84,22 +84,6 @@ async function createTables () {
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
 
-            // CREATE TABLE payment_details(
-            //     id SERIAL PRIMARY KEY,
-            //     order_id INTEGER REFERENCES orders(id),
-            //     amount INTEGER,
-            //     provider VARCHAR(255) NOT NULL,
-            //     status VARCHAR,
-            //     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            //     modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-            // )
-
-            // CREATE TABLE product_category(
-            //     id SERIAL PRIMARY KEY,
-            //     name VARCHAR(255),
-            //     desc
-            // )
-
          CREATE TABLE orders(
             id SERIAL PRIMARY KEY,
             user_id INTEGER REFERENCES users(id),
@@ -107,16 +91,7 @@ async function createTables () {
             status VARCHAR(255),
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        );
-
-        // CREATE TABLE order_details(
-        //     id SERIAL PRIMARY KEY,
-        //     user_id INTEGER REFERENCES users(id),
-        //     total DECIMAL(10,2),
-        //     payment_id INTEGER REFERENCES payment_details(id),
-        //     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-        //     modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        // );
+        );  
 
         CREATE TABLE order_items(
             id SERIAL PRIMARY KEY,
@@ -126,29 +101,6 @@ async function createTables () {
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
-
-            CREATE TABLE cart_item(
-                id SERIAL PRIMARY KEY,
-                cart_id INTEGER REFERENCES cart(id),
-                product_id INTEGER REFERENCES product(id),
-                quantity INTEGER,
-                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-            );
-            
-            CREATE TABLE orders(
-                id SERIAL PRIMARY KEY,
-                user_id INTEGER REFERENCES users(id),
-                product_id INTEGER REFERENCES product(id)
-            );
-
-            CREATE TABLE order_items(
-                id SERIAL PRIMARY KEY,
-                order_id INTEGER REFERENCES orders(id),
-                product_id INTEGER REFERENCES product(id),
-                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-            );
         `)
 
         await client.query(`
@@ -174,7 +126,7 @@ async function createTables () {
                 review_creator INTEGER REFERENCES users(username),
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-            )
+            );
 
 
 
@@ -182,7 +134,7 @@ async function createTables () {
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER REFERENCES users(id),
                 product_id INTEGER REFERENCES product(id),
-            )
+            );
 
 
             CREATE TABLE order_items(
@@ -191,7 +143,7 @@ async function createTables () {
                 product_id INTEGER REFERENCES product(id),
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-            )
+            );
             `);
             
     } catch (error) {
@@ -252,8 +204,8 @@ async function createInitialCartItem() {
         console.log('starting to create cart...');
 
         const cartItemsToAdd = [
-            {cart_id: 1, product_id: 1, quantity: 3},
-            {cart_id: 2, product_id: 2, quantity: 6}
+            {cartId: 1, productId: 1, quantity: 3},
+            {cartId: 2, productId: 2, quantity: 6}
         ]
         const cartItem = await Promise.all(cartItemsToAdd.map(cartItem => addItemToCart(cartItem)));
         console.log('Cart Items Added: ', cartItem)

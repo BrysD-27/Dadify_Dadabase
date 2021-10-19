@@ -1,3 +1,3 @@
 const { Client } = require('pg');
-const client = new Client('postgres://localhost:5432/');
+const client = new Client('bryso://localhost:5432/dadify');
 module.exports = client
