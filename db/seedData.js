@@ -68,21 +68,25 @@ async function createTables() {
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
-            
+
             CREATE TABLE orders(
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER REFERENCES users(id),
-                product_id INTEGER REFERENCES product(id)
-            );
+                total DECIMAL(10, 2),
+                status VARCHAR(255),
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );  
 
             CREATE TABLE order_items(
                 id SERIAL PRIMARY KEY,
                 order_id INTEGER REFERENCES orders(id),
                 product_id INTEGER REFERENCES product(id),
+                quantity INTEGER,
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
-        `);
+        `)
 
         await client.query(`
             CREATE OR REPLACE FUNCTION trigger_set_timestamp()
@@ -95,7 +99,7 @@ async function createTables() {
             CREATE TRIGGER set_timestamp
             BEFORE UPDATE ON users
             FOR EACH ROW
-            EXECUTE PROCEDURE trigger_set_timestamp();
+            EXECUTE PROCEDURE trigger_set_timestamp()
             );
       
             CREATE TABLE reviews(
@@ -106,13 +110,13 @@ async function createTables() {
                 review_creator INTEGER REFERENCES users(username),
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-            )
+            );
 
             CREATE TABLE orders(
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER REFERENCES users(id),
                 product_id INTEGER REFERENCES product(id),
-            )
+            );
 
             CREATE TABLE order_items(
                 id SERIAL PRIMARY KEY,
@@ -120,8 +124,9 @@ async function createTables() {
                 product_id INTEGER REFERENCES product(id),
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-            )
+            );
         `);
+            
     } catch (error) {
         console.error(error);
     }
