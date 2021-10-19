@@ -8,6 +8,9 @@ const updateProductItem = require("./productItems/updateProductItem.js");
 const getAllProductItems = require("./productItems/getAllProductItems.js");
 const getProductItemById = require("./productItems/getProductItemById.js");
 
+/* ----- USER PRODUCTS ----- */
+const getAllUserProductItems = require("./productItems/getAllUserProductItems.js");
+
 /* ----- PRODUCT INVENTORY ----- */
 const createProductInventory = require("./productInventory/createProductInventory.js");
 const deleteProductInventory = require("./productInventory/deleteProductInventory.js");
@@ -23,4 +26,5 @@ module.exports = {
     createProductInventory,
     updateProductInventory,
     deleteProductInventory,
+    getAllUserProductItems,
 }

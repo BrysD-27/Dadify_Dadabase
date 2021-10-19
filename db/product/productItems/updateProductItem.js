@@ -1,4 +1,4 @@
-const client = require("../../../client");
+const client = require("../../client");
 
 async function updateProductItem({inventory_id, name, description, sku, price}) {
     try {
