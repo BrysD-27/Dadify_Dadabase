@@ -24,23 +24,8 @@ async function dropTables() {
 	}
 }
 
-async function createTables () {
+async function createTables() {
     console.log('Creating tables...')
-   
-    // await client.query(`
-    //     CREATE OR REPLACE FUNCTION trigger_set_timestamp()
-    //     RETURNS TRIGGER AS $$
-    //     BEGIN
-    //     NEW.modified_at = NOW();
-    //     RETURN NEW;
-    //     END;
-    //     $$ LANGUAGE plpgsql;
-
-    //     CREATE TRIGGER set_timestamp
-    //     BEFORE UPDATE ON users
-    //     FOR EACH ROW
-    //     EXECUTE PROCEDURE trigger_set_timestamp();
-    // `);
 
     try {
         await client.query(`
@@ -70,7 +55,6 @@ async function createTables () {
                 description VARCHAR,
                 sku VARCHAR(255),
                 price DECIMAL(10,2),
-                creator_id INTEGER REFERENCES users(id),
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -98,7 +82,7 @@ async function createTables () {
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
-        `)
+        `);
 
         await client.query(`
             CREATE OR REPLACE FUNCTION trigger_set_timestamp()
@@ -108,12 +92,11 @@ async function createTables () {
             RETURN NEW;
             END;
             $$ LANGUAGE plpgsql;
-
             CREATE TRIGGER set_timestamp
             BEFORE UPDATE ON users
             FOR EACH ROW
             EXECUTE PROCEDURE trigger_set_timestamp();
-        `);
+            );
       
             CREATE TABLE reviews(
                 id SERIAL PRIMARY KEY,  
@@ -125,14 +108,11 @@ async function createTables () {
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             )
 
-
-
             CREATE TABLE orders(
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER REFERENCES users(id),
                 product_id INTEGER REFERENCES product(id),
             )
-
 
             CREATE TABLE order_items(
                 id SERIAL PRIMARY KEY,
@@ -141,8 +121,7 @@ async function createTables () {
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             )
-            `);
-            
+        `);
     } catch (error) {
         console.error(error);
     }
@@ -184,8 +163,8 @@ async function createInitialCart() {
         console.log('starting to create cart...');
 
         const cartsToCreate = [
-            {user_id: 1, total: 0.00 },
-            {user_id: 2, total: 0.00 }
+            {userId: 1, total: 0.00 },
+            {userId: 2, total: 0.00 }
         ]
         const carts = await Promise.all(cartsToCreate.map(cart => createCart(cart)));
         console.log('Carts Created: ', carts)
@@ -201,8 +180,8 @@ async function createInitialCartItem() {
         console.log('starting to create cart...');
 
         const cartItemsToAdd = [
-            {cart_id: 1, product_id: 1, quantity: 3},
-            {cart_id: 2, product_id: 2, quantity: 6}
+            {cartId: 1, productId: 1, quantity: 3},
+            {cartId: 2, productId: 2, quantity: 6}
         ]
         const cartItem = await Promise.all(cartItemsToAdd.map(cartItem => addItemToCart(cartItem)));
         console.log('Cart Items Added: ', cartItem)
