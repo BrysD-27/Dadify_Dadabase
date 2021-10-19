@@ -104,8 +104,8 @@ async function createTables() {
                 id SERIAL PRIMARY KEY,  
                 title VARCHAR(255) NOT NULL,
                 content VARCHAR(500),
-                product_name INTEGER REFERENCES product(name),
-                review_creator INTEGER REFERENCES users(username),
+                product_name VARCHAR(255) UNIQUE NOT NULL REFERENCES product(name),
+                review_creator VARCHAR(255)UNIQUE NOT NULL REFERENCES users(username),
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
