@@ -122,7 +122,7 @@ async function createInitialUsers() {
             {username:'LilCrunk', password:'dummypassword', first_name:'Joseph', last_name:'Biden',email: 'user8@testmail.com', phone: 1111111118},
             {username:'DavetheGoat', password:'dummypassword', first_name:'David', last_name:'Beckham',email: 'user9@testmail.com', phone: 1111111119},
             {username:'JustTim', password:'dummypassword', first_name:'Tim', last_name:'Sweeny',email: 'user10@testmail.com', phone: 1111111121},
-            {username:'Froge37', password:'dummypassword', first_name:'Dermott', last_name:'Smith',email: 'user11@testmail.com', phone: 1111111131},
+            {username:'Froge37', password:'dummypassword', first_name:'Ismael', last_name:'Everett',email: 'user11@testmail.com', phone: 1111111131},
             {username:'NattheCat', password:'dummypassword', first_name:'Natalie', last_name:'Felonius',email: 'user12@testmail.com', phone: 1111111141},
             {username:'QuizicallyYours', password:'dummypassword', first_name:'Pat', last_name:'Sajak',email: 'user13@testmail.com', phone: 1111111151},
             {username:'Boomer-Sooner-12', password:'dummypassword', first_name:'Bob', last_name:'Stoops',email: 'user14@testmail.com', phone: 1111111161},
