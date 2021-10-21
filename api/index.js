@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const { getUserById } = require('../db');
 const { JWT_SECRET } = process.env;
 
-const usersRouter = require('../api/users');
+const usersRouter = require('./product/users/usersindex');
 apiRouter.use('/users', usersRouter);
 
 const productsRouter = require('../api/product/product')
