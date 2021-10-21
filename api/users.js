@@ -7,6 +7,7 @@ const {
     getUserByUsername, 
     getUserById,
     getUser} = require('../db/user/');
+const JWT_SECRET = require('./secret');
 
 
 
@@ -28,7 +29,10 @@ usersRouter.post('/login', async(req, res, next) => {
 
     try {
         const user = await getUser({username,password});
-        const token = jwt.sign((user.id, user.username), process.env)
+        const token = jwt.sign({
+            id: user.id, 
+            username: user.username
+        }, JWT_SECRET);
 
         if(user && user.password == password) {
             res.send({message: 'Login successful', token})
