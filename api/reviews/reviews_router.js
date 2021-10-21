@@ -50,7 +50,7 @@ reviewsRouter.get('/reviews/:userId', async (req, res, next) => {
 
 reviewsRouter.get('/reviews', async (req, res, next) => {
     try {
-        const reviews = await getAllReviews;
+        const reviews = await getAllReviews();
         res.send(reviews);
     } catch (error) {
         throw error;
