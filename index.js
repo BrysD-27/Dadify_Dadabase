@@ -1,20 +1,32 @@
-const PORT = process.env.PORT || 3000;
+const { PORT = 3000 } = process.env;
 
 const express = require('express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-const cors = require('cors');
-const app = express();
-const JWT_SECRET = require('./api/secret');
-const client = require('./db/client');
-const apiRouter = require('./api');
-const {getUserById} = require('./db/index');
-client.connect();
+const server = express();
 
-app.use(cors());
-app.use(morgan('dev'));
-app.use(bodyParser.json());
+const bodyParser = require('body-parser');
+server.use(bodyParser.json());
+
+const morgan = require('morgan');
+server.use(morgan('dev'));
+
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = require('./api/secret');
+const {getUserById} = require('./db');
+
+
+server.use((req,res,next) => {
+    console.log("<_____Body Logger START_____");
+    console.log(req.body);
+    console.log("<_____Body Logger END_____>");
+
+    next();
+});
+
+const apiRouter = require('./api');
+server.use('/api', apiRouter);
+
+const  client  = require('./db/client');
+client.connect();
 
 server.use(async (req, res, next) => {
     if(req.header('Authorization')) {
@@ -36,8 +48,6 @@ server.use(async (req, res, next) => {
     }
 });
 
-server.use('/api', apiRouter);
-
-app.listen(PORT, () => {
-    HTMLFormControlsCollection.log(`App listening on http://localhost:${PORT}`)
+server.listen(PORT, () => {
+    console.log(`App listening on http://localhost:${PORT}`)
 });

@@ -26,21 +26,7 @@ async function dropTables() {
 
 async function createTables () {
     console.log('Creating tables...')
-   
-    // await client.query(`
-    //     CREATE OR REPLACE FUNCTION trigger_set_timestamp()
-    //     RETURNS TRIGGER AS $$
-    //     BEGIN
-    //     NEW.modified_at = NOW();
-    //     RETURN NEW;
-    //     END;
-    //     $$ LANGUAGE plpgsql;
 
-    //     CREATE TRIGGER set_timestamp
-    //     BEFORE UPDATE ON users
-    //     FOR EACH ROW
-    //     EXECUTE PROCEDURE trigger_set_timestamp();
-    // `);
 
     try {
         await client.query(`
@@ -66,7 +52,7 @@ async function createTables () {
 
         CREATE TABLE product(
             id SERIAL PRIMARY KEY,
-            name VARCHAR(255),
+            name VARCHAR(255) UNIQUE NOT NULL,
             description VARCHAR,
             sku VARCHAR(255),
             price DECIMAL(10,2),
@@ -83,47 +69,16 @@ async function createTables () {
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
-
-         CREATE TABLE orders(
-            id SERIAL PRIMARY KEY,
-            user_id INTEGER REFERENCES users(id),
-            total DECIMAL(10, 2),
-            status VARCHAR(255),
-            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        );  
-
-        CREATE TABLE order_items(
-            id SERIAL PRIMARY KEY,
-            order_id INTEGER REFERENCES orders(id),
-            product_id INTEGER REFERENCES product(id),
-            quantity INTEGER,
-            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        );
         `)
 
         await client.query(`
-            CREATE OR REPLACE FUNCTION trigger_set_timestamp()
-            RETURNS TRIGGER AS $$
-            BEGIN
-            NEW.modified_at = NOW();
-            RETURN NEW;
-            END;
-            $$ LANGUAGE plpgsql;
 
-            CREATE TRIGGER set_timestamp
-            BEFORE UPDATE ON users
-            FOR EACH ROW
-            EXECUTE PROCEDURE trigger_set_timestamp()
-        );
-      
             CREATE TABLE reviews(
                 id SERIAL PRIMARY KEY,  
                 title VARCHAR(255) NOT NULL,
-                content VARCHAR(500);
-                product_name INTEGER REFERENCES product(name),
-                review_creator INTEGER REFERENCES users(username),
+                content VARCHAR(500),
+                product_name VARCHAR(255) UNIQUE NOT NULL REFERENCES product(name),
+                review_creator VARCHAR(255)UNIQUE NOT NULL REFERENCES users(username),
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
@@ -133,7 +88,7 @@ async function createTables () {
             CREATE TABLE orders(
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER REFERENCES users(id),
-                product_id INTEGER REFERENCES product(id),
+                product_id INTEGER REFERENCES product(id)
             );
 
 
