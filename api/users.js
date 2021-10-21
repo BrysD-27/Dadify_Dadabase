@@ -1,11 +1,13 @@
 const express = require('express');
 const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
+const user = require('../db/user/');
 
 const {     
     createUser, 
     getUserByUsername, 
     getUserById,
+    getAllUsers,
     getUser} = require('../db/user/');
 
 
@@ -47,6 +49,16 @@ usersRouter.get(`/users/:username`, async(req, res, next) => {
         const chosenUser = await getUserById(user);
         const { username, first_name, last_name, email, phone} = chosenUser
         res.send({username, first_name, last_name, email, phone})
+    } catch (error) {
+        throw error;
+    }
+
+})
+
+usersRouter.get(`/users`, async(req, res, next) => {
+    try {
+     const userlist = await getAllUsers();
+     res.send(userlist);
     } catch (error) {
         throw error;
     }
