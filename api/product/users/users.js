@@ -7,7 +7,7 @@ const {
     getUserByUsername, 
     getUserById,
     getAllUsers,
-    getUser} = require('../../../db/user');
+    getUser} = require('../db/user/');
 
 
 
@@ -61,4 +61,4 @@ usersRouter.get(`/`, async(req, res, next) => {
 
 })
 
-module.exports = apiusersRouter;
+module.exports = usersRouter;
