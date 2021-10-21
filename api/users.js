@@ -42,7 +42,7 @@ usersRouter.post('/login', async(req, res, next) => {
     }
 })
 
-usersRouter.get(`/users/:username`, async(req, res, next) => {
+usersRouter.get(`/:username`, async(req, res, next) => {
     const username = req.params.username;
     const { user } = req.body;
     try {
@@ -55,7 +55,7 @@ usersRouter.get(`/users/:username`, async(req, res, next) => {
 
 })
 
-usersRouter.get(`/users`, async(req, res, next) => {
+usersRouter.get(`/`, async(req, res, next) => {
     try {
      const userlist = await getAllUsers();
      res.send(userlist);
