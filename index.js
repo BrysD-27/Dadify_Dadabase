@@ -20,10 +20,10 @@ server.use((req,res,next) => {
 const apiRouter = require('./api');
 server.use('/api', apiRouter);
 
-const { client } = require('./db');
+const  client  = require('./db/client');
 client.connect();
 
 
-app.listen(PORT, () => {
-    HTMLFormControlsCollection.log(`App listening on http://localhost:${PORT}`)
+server.listen(PORT, () => {
+    console.log(`App listening on http://localhost:${PORT}`)
 });
