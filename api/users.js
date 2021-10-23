@@ -6,6 +6,7 @@ const {
     createUser, 
     getUserByUsername, 
     getUserById,
+    getAllUsers,
     getUser} = require('../db/user/');
 const JWT_SECRET = require('./secret');
 
@@ -33,25 +34,30 @@ usersRouter.post('/login', async(req, res, next) => {
             id: user.id, 
             username: user.username
         }, JWT_SECRET);
-
         res.send({message: 'Login successful', token})
-        
+         throw('Incorrect Username or Password!')
     } catch (error) {
         console.log(error);
     }
 })
 
-usersRouter.get(`/users/:username`, async(req, res, next) => {
-    const username = req.params.username;
-    const { user } = req.body;
+usersRouter.get(`/:username`, async(req, res, next) => {
     try {
-        const chosenUser = await getUserById(user);
-        const { username, first_name, last_name, email, phone} = chosenUser
-        res.send({username, first_name, last_name, email, phone})
+        const chosenUser = await getUserByUsername(username);
+        res.send(chosenUser)
     } catch (error) {
         throw error;
     }
 
+})
+
+usersRouter.get(`/`, async(req,res,next) => {
+    try {
+        const userlist = await getAllUsers();
+        res.send(userlist);
+    } catch (error) {
+        console.error(error)
+    }
 })
 
 module.exports = usersRouter;
