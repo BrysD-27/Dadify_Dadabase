@@ -27,7 +27,6 @@ usersRouter.post('/login', async(req, res, next) => {
     if (!username || !password) {
         throw('Please enter both a valid username and password')
     }
-
     try {
         const user = await getUser({username,password});
         const token = jwt.sign({
@@ -39,7 +38,7 @@ usersRouter.post('/login', async(req, res, next) => {
     } catch (error) {
         console.log(error);
     }
-})
+});
 
 usersRouter.get(`/:username`, async(req, res, next) => {
     try {
