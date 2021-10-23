@@ -17,6 +17,17 @@ async function createUser({username, password, first_name, last_name, email, pho
     }
 }
 
+async function getAllUsers(){
+    try {
+        const {rows: users} = await client.query(`
+        SELECT * FROM users;
+        `)
+        return users;
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 async function getUserByUsername(username) {
     try {
         const {rows: [user]} = await client.query(`
@@ -65,5 +76,6 @@ module.exports = {
     createUser, 
     getUserByUsername, 
     getUserById,
-    getUser
+    getUser,
+    getAllUsers
 }
