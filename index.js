@@ -13,6 +13,8 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = require('./api/secret');
 const {getUserById} = require('./db');
 
+const cors = require('cors');
+server.use(cors());
 
 server.use((req,res,next) => {
     console.log("<_____Body Logger START_____");
