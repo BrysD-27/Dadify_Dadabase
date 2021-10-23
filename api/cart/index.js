@@ -4,6 +4,7 @@ const {createCart, getCartAndItemsByUser, updateCartTotal} = require('../../db/c
 cartRouter.get('/', async (req, res, next) => {
     try {
         const id = req.user.id;
+        console.log(req);
         if(req.user) {
             const cart = await getCartAndItemsByUser(id);
             res.send(cart);
