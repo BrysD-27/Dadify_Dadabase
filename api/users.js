@@ -34,7 +34,7 @@ usersRouter.post('/login', async(req, res, next) => {
             id: user.id, 
             username: user.username
         }, JWT_SECRET);
-            res.send({message: 'Login successful', token})
+        res.send({message: 'Login successful', token})
          throw('Incorrect Username or Password!')
     } catch (error) {
         console.log(error);
