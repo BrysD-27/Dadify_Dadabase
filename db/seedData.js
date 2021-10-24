@@ -39,6 +39,7 @@ async function createTables () {
                 last_name VARCHAR(255),
                 email VARCHAR(255) UNIQUE NOT NULL, 
                 phone INT,
+                admin BOOLEAN DEFAULT FALSE,
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
@@ -126,7 +127,8 @@ async function createInitialUsers() {
             {username:'NattheCat', password:'dummypassword', first_name:'Natalie', last_name:'Felonius',email: 'user12@testmail.com', phone: 1111111141},
             {username:'QuizicallyYours', password:'dummypassword', first_name:'Pat', last_name:'Sajak',email: 'user13@testmail.com', phone: 1111111151},
             {username:'Boomer-Sooner-12', password:'dummypassword', first_name:'Bob', last_name:'Stoops',email: 'user14@testmail.com', phone: 1111111161},
-            {username:'PistolsFiring', password:'dummypassword', first_name:'Michael', last_name:'Gundy',email: 'user15@testmail.com', phone: 1111111171}
+            {username:'PistolsFiring', password:'dummypassword', first_name:'Michael', last_name:'Gundy',email: 'user15@testmail.com', phone: 1111111171},
+            {username:'grble', password:'dummypassword', first_name: null, last_name:null, email: 'grble@fakemail.org', phone: null, admin: true}
         ];
 
         const users = await Promise.all(usersToCreate.map(createUser));
