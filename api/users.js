@@ -15,7 +15,7 @@ const JWT_SECRET = require('./secret');
 usersRouter.post('/register', async(req, res, next) => {
     try {
         const user = await createUser(req.body);
-            res.send(user);
+        res.send(user);
     } catch (error) {
         console.error(error);
     }

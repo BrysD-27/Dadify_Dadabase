@@ -1,12 +1,12 @@
 const client = require('../client');
 
-async function addItemToCart({cartId, productId, quantity}) {
+async function addItemToCart({cart_id, product_id, quantity}) {
     try {
         const {rows: [cartItem]} = await client.query(`
             INSERT INTO cart_item(cart_id, product_id, quantity)
             VALUES($1, $2, $3)
             RETURNING *;
-        `, [cartId, productId, quantity]);
+        `, [cart_id, product_id, quantity]);
         return cartItem;
     } catch (error) {
         throw error;
@@ -18,8 +18,7 @@ async function getCartItemById(id) {
         const {rows} = await client.query(`
             SELECT * 
             FROM cart_item
-            WHERE id=${id}
-            RETURNING *;
+            WHERE id=${id};
         `);
         return rows;
     } catch (error) {
@@ -32,8 +31,7 @@ async function updateCartItem({id, quantity}) {
         const {rows: [cartItem]} = await client.query(`
             UPDATE cart_item 
             SET quantity=${quantity}, modified_at= NOW()
-            WHERE id=${id}
-            RETURNING *;
+            WHERE id=${id};
         `);
         return cartItem;
     } catch (error) {
@@ -46,8 +44,7 @@ async function getItemsByCartId(id) {
         const {rows} = await client.query(`
             SELECT * 
             FROM cart_item
-            WHERE cart_id = ${id}
-            RETURNING *;
+            WHERE cart_id = ${id};
         `);
 
         return rows;

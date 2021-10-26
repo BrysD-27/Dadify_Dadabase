@@ -160,8 +160,8 @@ async function createInitialCartItem() {
         console.log('starting to create cart...');
 
         const cartItemsToAdd = [
-            {cartId: 1, productId: 1, quantity: 3},
-            {cartId: 2, productId: 2, quantity: 6}
+            {cart_id: 1, product_id: 1, quantity: 3},
+            {cart_id: 2, product_id: 2, quantity: 6}
         ]
         const cartItem = await Promise.all(cartItemsToAdd.map(cartItem => addItemToCart(cartItem)));
         console.log('Cart Items Added: ', cartItem)
