@@ -16,7 +16,7 @@ const JWT_SECRET = require('./secret');
 usersRouter.post('/register', async(req, res, next) => {
     try {
         const user = await createUser(req.body);
-            res.send(user);
+        res.send(user);
     } catch (error) {
         console.error(error);
     }
@@ -34,7 +34,7 @@ usersRouter.post('/login', async(req, res, next) => {
             id: user.id, 
             username: user.username
         }, JWT_SECRET);
-        res.send({message: 'Login successful', token})
+        res.send({message: 'Login successful', token, id: user.id});
          throw('Incorrect Username or Password!')
     } catch (error) {
         console.log(error);
