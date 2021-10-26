@@ -43,7 +43,8 @@ usersRouter.post('/login', async(req, res, next) => {
 
 usersRouter.get(`/:username`, async(req, res, next) => {
     try {
-        const chosenUser = await getUserByUsername(username);
+        console.log(req.params.username);
+        const chosenUser = await getUserByUsername(req.params.username);
         res.send(chosenUser)
     } catch (error) {
         throw error;
@@ -60,35 +61,35 @@ usersRouter.get(`/`, async(req,res,next) => {
     }
 })
 
-usersRouter.patch('/:username', async(req, res, next) => {
-        const {username} = req.body.username;
-        const { 
-            id,
-            username,
-            password,
-            first_name,
-            last_name,
-            email,
-            phone,
-            admin
-         } = req.body;
+// usersRouter.patch('/:username', async(req, res, next) => {
+//         const {username} = req.body.username;
+//         const { 
+//             id,
+//             username,
+//             password,
+//             first_name,
+//             last_name,
+//             email,
+//             phone,
+//             admin
+//          } = req.body;
 
-    try {
-        const patchedUser = await updateUser({
-            username, 
-            password,
-            first_name,
-            last_name,
-            email,
-            phone,
-            admin, 
-            id});
-        res.send(patchedUser)
-    } catch (error) {
-        console.error('Error updating user')
-        throw error;    
-    }
+//     try {
+//         const patchedUser = await updateUser({
+//             username, 
+//             password,
+//             first_name,
+//             last_name,
+//             email,
+//             phone,
+//             admin, 
+//             id});
+//         res.send(patchedUser)
+//     } catch (error) {
+//         console.error('Error updating user')
+//         throw error;    
+//     }
 
-});
+// });
 
 module.exports = usersRouter;
