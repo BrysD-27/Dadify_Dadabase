@@ -1,16 +1,15 @@
 const client = require("../../client");
 
-async function createProductInventory({id, quantity, created_at}) {
+async function createProductInventory({id, quantity}) {
     try {
         const {rows:[productInventory]} = await client.query(`
             INSERT INTO productInventory (
                 id,
                 quantity, 
-                created_at
             )
             VALUES($1, $2, $3)
             RETURNING *;
-        `, [id, quantity, created_at]);
+        `, [id, quantity]);
 
         return productInventory;
     } catch (error) {

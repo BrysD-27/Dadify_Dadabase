@@ -1,8 +1,20 @@
-const apiRouter = require('express').Router();
+const express = require('express');
+const apiRouter = express.Router();
 
-const productsRouter = require('./product/product');
-const cartRouter = require('./cart/index');
 
+const usersRouter = require('./users');
+apiRouter.use('/users', usersRouter);
+
+const productsRouter = require('../api/product/product')
 apiRouter.use('/products', productsRouter);
-apiRouter.use('/cart', cartRouter);
+
 const reviewsRouter = require('./reviews/reviews_router')
+apiRouter.use('/reviews', reviewsRouter);
+
+const cartRouter = require('./cart/index')
+apiRouter.use('/cart', cartRouter);
+
+const cart_itemRouter = require('./cart_item/index');
+apiRouter.use('/cart_item', cart_itemRouter);
+
+module.exports = apiRouter;

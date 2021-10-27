@@ -23,8 +23,7 @@ async function getCartAndItemsByUser(userId) {
 		const {rows: [cart]} = await client.query(`
 			SELECT * 
 			FROM cart
-			WHERE user_id=${userId}
-			RETURNING *;
+			WHERE user_id=${userId};
 		`);
 
 		const {rows:[items]} = await client.query(`

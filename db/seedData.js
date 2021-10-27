@@ -12,6 +12,7 @@ async function dropTables() {
 		console.log('Dropping All Tables...');
 		await client.query(`
             DROP TABLE IF EXISTS order_items;
+            DROP TABLE IF EXISTS reviews;
             DROP TABLE IF EXISTS orders;
 			DROP TABLE IF EXISTS cart_item;
 			DROP TABLE IF EXISTS product;  
@@ -51,6 +52,7 @@ async function createTables() {
 
             CREATE TABLE product(
                 id SERIAL PRIMARY KEY,
+                "creatorId" INTEGER REFERENCES users(id),
                 name VARCHAR(255) UNIQUE NOT NULL,
                 description VARCHAR,
                 sku VARCHAR(255),
@@ -115,7 +117,7 @@ async function createInitialUsers() {
             {username:'LilCrunk', password:'dummypassword', first_name:'Joseph', last_name:'Biden',email: 'user8@testmail.com', phone: 1111111118},
             {username:'DavetheGoat', password:'dummypassword', first_name:'David', last_name:'Beckham',email: 'user9@testmail.com', phone: 1111111119},
             {username:'JustTim', password:'dummypassword', first_name:'Tim', last_name:'Sweeny',email: 'user10@testmail.com', phone: 1111111121},
-            {username:'Froge37', password:'dummypassword', first_name:'Dermott', last_name:'Smith',email: 'user11@testmail.com', phone: 1111111131},
+            {username:'Froge37', password:'dummypassword', first_name:'Ismael', last_name:'Everett',email: 'user11@testmail.com', phone: 1111111131},
             {username:'NattheCat', password:'dummypassword', first_name:'Natalie', last_name:'Felonius',email: 'user12@testmail.com', phone: 1111111141},
             {username:'QuizicallyYours', password:'dummypassword', first_name:'Pat', last_name:'Sajak',email: 'user13@testmail.com', phone: 1111111151},
             {username:'Boomer-Sooner-12', password:'dummypassword', first_name:'Bob', last_name:'Stoops',email: 'user14@testmail.com', phone: 1111111161},
@@ -153,8 +155,8 @@ async function createInitialCartItem() {
         console.log('starting to create cart...');
 
         const cartItemsToAdd = [
-            {cartId: 1, productId: 1, quantity: 3},
-            {cartId: 2, productId: 2, quantity: 6}
+            {cart_id: 1, product_id: 1, quantity: 3},
+            {cart_id: 2, product_id: 2, quantity: 6}
         ]
         const cartItem = await Promise.all(cartItemsToAdd.map(cartItem => addItemToCart(cartItem)));
         console.log('Cart Items Added: ', cartItem)
