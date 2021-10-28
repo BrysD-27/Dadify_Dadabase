@@ -52,7 +52,7 @@ async function createTables() {
 
             CREATE TABLE product(
                 id SERIAL PRIMARY KEY,
-                "creatorId" INTEGER REFERENCES users(id),
+                admin BOOLEAN DEFAULT NULL,
                 name VARCHAR(255) UNIQUE NOT NULL,
                 description VARCHAR,
                 sku VARCHAR(255),

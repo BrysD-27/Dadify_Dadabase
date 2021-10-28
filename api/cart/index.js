@@ -14,9 +14,9 @@ cartRouter.get('/:user_id', async (req, res, next) => {
 
 cartRouter.post('/:user_id', async (req, res, next) => {
     const {total} = req.body;
-    const id = req.params.user_id;
+    const user_id = req.params.user_id;
     try {
-        const cart = await createCart({id, total});
+        const cart = await createCart({user_id, total});
         res.send(cart);
         next();
     } catch (error) {
@@ -26,10 +26,10 @@ cartRouter.post('/:user_id', async (req, res, next) => {
 
 cartRouter.patch('/:user_id', async (req, res, next) => {
     const {total} = req.body;
-    const id = req.params.user_id;
+    const userId = req.params.user_id;
     try {
-        const cart = await updateCartTotal({id, total});
-        res.send(cart);
+        const cart = await updateCartTotal({userId, total});
+        res.send({message: 'Success', cart});
         next();
     } catch (error) {
         throw error;

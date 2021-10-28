@@ -26,7 +26,7 @@ async function getCartAndItemsByUser(userId) {
 			WHERE user_id=${userId};
 		`);
 
-		const {rows:[items]} = await client.query(`
+		const {rows:items} = await client.query(`
 			SELECT * FROM product
 			JOIN cart_item ON product_id = product.id
 			WHERE cart_id = ${cart.id};
@@ -43,8 +43,7 @@ async function updateCartTotal({userId, total}) {
 		const {rows: [cart]} = await client.query(`
 			UPDATE cart
 			SET total=${total}, modified_at= NOW()
-			WHERE user_id=${userId}
-			RETURNING *;
+			WHERE user_id=${userId};
 		`);
 		return cart;
 	} catch (error) {
