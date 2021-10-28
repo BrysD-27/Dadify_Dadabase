@@ -3,7 +3,7 @@ const {getProductItemById, deleteProductItem} = require('../../db');
 
 productsRouter.delete('/:productId', async (req, res, next) => {
     try {
-        const {id} = req.params;
+        const {id} = req.params.productId;
         const product = await getProductItemById(id);
         if (product.created_by === req.users.id) {
             const deletedProduct = await deleteProductItem(product.id);
