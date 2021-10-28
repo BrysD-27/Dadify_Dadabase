@@ -1,21 +1,15 @@
 const productsRouter = require('express').Router();
-const {updateProductItem, getProductItemById} = require('../../db');
+const {
+    updateProductItem, } = require('../../db');
 
 productsRouter.patch('/:productId', async (req, res, next) => {
-    const {product_id} = req.params;
-    const product = await getProductItemById(product_id);
-    const {name, description, sku, price, created_by} = req.body;
+    const {product_id} = req.params.productId;
+    const {name, description, price} = req.body;
     try {
-        if (req.user.id === product.created_by) {
-            const patchedProduct = await updateProductItem({
-            name,
-			description,
-            sku,
-            price,
-            created_by
-            });
-            res.send(patchedProduct);
-        }
+        const patchedProduct = await updateProductItem(product_id, name, description, price);
+        res.send({message: 'Success', patchedProduct})
+        next();
+
     } catch (error) {
         console.error("Error updating routine.");
         throw error;

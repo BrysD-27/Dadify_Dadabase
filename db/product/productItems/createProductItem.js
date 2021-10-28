@@ -1,6 +1,6 @@
 const client = require("../../client");
 
-async function createProductItem({ name, description, sku, price}) {
+async function createProductItem({name, description, sku, price}) {
     try {
         const {rows:[productItem]} = await client.query(`
             INSERT INTO product (
@@ -22,4 +22,4 @@ async function createProductItem({ name, description, sku, price}) {
 
 module.exports = createProductItem;
 
-//                inventory_id, -> for later?
+// inventory_id, -> for later?
