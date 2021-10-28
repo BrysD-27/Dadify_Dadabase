@@ -25,9 +25,8 @@ async function dropTables() {
 	}
 }
 
-async function createTables () {
+async function createTables() {
     console.log('Creating tables...')
-
 
     try {
         await client.query(`
@@ -51,29 +50,29 @@ async function createTables () {
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
 
-        CREATE TABLE product(
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(255) UNIQUE NOT NULL,
-            description VARCHAR,
-            sku VARCHAR(255),
-            price DECIMAL(10,2),
-            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        );
+            CREATE TABLE product(
+                id SERIAL PRIMARY KEY,
+                admin BOOLEAN DEFAULT NULL,
+                name VARCHAR(255) UNIQUE NOT NULL,
+                description VARCHAR,
+                sku VARCHAR(255),
+                price DECIMAL(10,2),
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );
 
-        CREATE TABLE cart_item(
-            id SERIAL PRIMARY KEY,
-            cart_id INTEGER REFERENCES cart(id),
-            product_id INTEGER REFERENCES product(id),
-            quantity INTEGER,
-            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        );
+            CREATE TABLE cart_item(
+                id SERIAL PRIMARY KEY,
+                cart_id INTEGER REFERENCES cart(id),
+                product_id INTEGER REFERENCES product(id),
+                quantity INTEGER,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );
         `)
 
         await client.query(`
-
             CREATE TABLE reviews(
                 id SERIAL PRIMARY KEY,  
                 title VARCHAR(255) NOT NULL,
@@ -84,14 +83,11 @@ async function createTables () {
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
 
-
-
             CREATE TABLE orders(
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER REFERENCES users(id),
                 product_id INTEGER REFERENCES product(id)
             );
-
 
             CREATE TABLE order_items(
                 id SERIAL PRIMARY KEY,
@@ -100,8 +96,7 @@ async function createTables () {
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
-            `);
-            
+        `);
     } catch (error) {
         console.error(error);
     }
@@ -143,8 +138,8 @@ async function createInitialCart() {
         console.log('starting to create cart...');
 
         const cartsToCreate = [
-            {user_id: 1, total: 0.00 },
-            {user_id: 2, total: 0.00 }
+            {userId: 1, total: 0.00 },
+            {userId: 2, total: 0.00 }
         ]
         const carts = await Promise.all(cartsToCreate.map(cart => createCart(cart)));
         console.log('Carts Created: ', carts)
