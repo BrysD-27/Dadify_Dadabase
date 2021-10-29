@@ -8,7 +8,6 @@ productsRouter.delete('/:productId', async (req, res, next) => {
         const deletedProduct = await deleteProductItem(product.id);
         res.send(deletedProduct);
         next();
-
     } catch (error) {
         console.error("Error deleting product item.");
         throw error
