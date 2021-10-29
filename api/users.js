@@ -7,6 +7,7 @@ const {
     getUserByUsername, 
     getUserById,
     getAllUsers,
+    updateUser,
     getUser} = require('../db/user/');
 const JWT_SECRET = require('./secret');
 
@@ -27,7 +28,6 @@ usersRouter.post('/login', async(req, res, next) => {
     if (!username || !password) {
         throw('Please enter both a valid username and password')
     }
-
     try {
         const user = await getUser({username,password});
         const token = jwt.sign({
@@ -39,11 +39,12 @@ usersRouter.post('/login', async(req, res, next) => {
     } catch (error) {
         console.log(error);
     }
-})
+});
 
 usersRouter.get(`/:username`, async(req, res, next) => {
     try {
-        const chosenUser = await getUserByUsername(username);
+        console.log(req.params.username);
+        const chosenUser = await getUserByUsername(req.params.username);
         res.send(chosenUser)
     } catch (error) {
         throw error;
@@ -59,5 +60,36 @@ usersRouter.get(`/`, async(req,res,next) => {
         console.error(error)
     }
 })
+
+// usersRouter.patch('/:username', async(req, res, next) => {
+//         const {username} = req.body.username;
+//         const { 
+//             id,
+//             username,
+//             password,
+//             first_name,
+//             last_name,
+//             email,
+//             phone,
+//             admin
+//          } = req.body;
+
+//     try {
+//         const patchedUser = await updateUser({
+//             username, 
+//             password,
+//             first_name,
+//             last_name,
+//             email,
+//             phone,
+//             admin, 
+//             id});
+//         res.send(patchedUser)
+//     } catch (error) {
+//         console.error('Error updating user')
+//         throw error;    
+//     }
+
+// });
 
 module.exports = usersRouter;
