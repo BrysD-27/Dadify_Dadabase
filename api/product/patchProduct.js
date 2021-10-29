@@ -1,6 +1,5 @@
 const productsRouter = require('express').Router();
-const {
-    updateProductItem, } = require('../../db');
+const {updateProductItem, } = require('../../db');
 
 productsRouter.patch('/:productId', async (req, res, next) => {
     const {product_id} = req.params.productId;
@@ -11,7 +10,7 @@ productsRouter.patch('/:productId', async (req, res, next) => {
         next();
 
     } catch (error) {
-        console.error("Error updating routine.");
+        console.error("Error updating product.");
         throw error;
     };
 });
