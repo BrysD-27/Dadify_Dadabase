@@ -5,12 +5,10 @@ productsRouter.delete('/:productId', async (req, res, next) => {
     try {
         const {id} = req.params.productId;
         const product = await getProductItemById(id);
-        if (product.created_by === req.users.id) {
-            const deletedProduct = await deleteProductItem(product.id);
-            res.send(deletedProduct);
-        } else {
-            next();
-        }
+        const deletedProduct = await deleteProductItem(product.id);
+        res.send(deletedProduct);
+        next();
+
     } catch (error) {
         console.error("Error deleting product item.");
         throw error
