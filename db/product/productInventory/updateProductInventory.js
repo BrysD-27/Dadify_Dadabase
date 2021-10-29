@@ -6,7 +6,7 @@ async function updateProductInventory({id, quantity}) {
             UPDATE productInventory
             SET 
                 quantity = $2,  
-                m
+                "modifiedAt" = NOW()
             WHERE id = $1
             RETURNING *;
         `, [id, quantity]);
