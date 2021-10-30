@@ -17,8 +17,10 @@ usersRouter.post('/register', async(req, res, next) => {
     try {
         const user = await createUser(req.body);
         res.send(user);
+        throw('Username or Email already in use.')
     } catch (error) {
         console.error(error);
+
     }
 });
 
@@ -34,7 +36,7 @@ usersRouter.post('/login', async(req, res, next) => {
             id: user.id, 
             username: user.username
         }, JWT_SECRET);
-        res.send({message: 'Login successful', token, id: user.id});
+        res.send({message: 'Login successful', token, id: user.id, isAdmin: user.admin});
          throw('Incorrect Username or Password!')
     } catch (error) {
         console.log(error);
