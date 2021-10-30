@@ -38,6 +38,7 @@ async function createTables() {
                 last_name VARCHAR(255),
                 email VARCHAR(255) UNIQUE NOT NULL, 
                 phone INT,
+                admin BOOLEAN DEFAULT NULL,
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
@@ -107,21 +108,22 @@ async function createInitialUsers() {
     console.log('Creating dummy list of users...')
     try {
         const usersToCreate = [
-            {username:'SmarmyTerrier', password:'dummypassword', first_name:'John', last_name:'Doe',email: 'user1@testmail.com',  phone: 1111111111},
-            {username:'MiyagiSan14', password:'dummypassword', first_name:'Tom', last_name:'Collins',email: 'user2@testmail.com', phone: 1111111112},
-            {username:'TebCrux', password:'dummypassword', first_name:'Ted', last_name:'Cruz',email: 'user3@testmail.com', phone: 1111111113},
-            {username:'JSeed2', password:'dummypassword', first_name:'Joseph', last_name:'Seed',email: 'user4@testmail.com', phone: 1111111114},
-            {username:'BloodyBookworm', password:'dummypassword', first_name:'Bernie', last_name:'Sanders',email: 'user5@testmail.com', phone: 1111111115},
-            {username:'punctuallyqueasy', password:'dummypassword', first_name:'Kamala', last_name:'Harris',email: 'user6@testmail.com', phone: 1111111116},
-            {username:'Yearly_Helper', password:'dummypassword', first_name:'James', last_name:'Inhofe',email: 'user7@testmail.com', phone: 1111111117},
-            {username:'LilCrunk', password:'dummypassword', first_name:'Joseph', last_name:'Biden',email: 'user8@testmail.com', phone: 1111111118},
-            {username:'DavetheGoat', password:'dummypassword', first_name:'David', last_name:'Beckham',email: 'user9@testmail.com', phone: 1111111119},
-            {username:'JustTim', password:'dummypassword', first_name:'Tim', last_name:'Sweeny',email: 'user10@testmail.com', phone: 1111111121},
-            {username:'Froge37', password:'dummypassword', first_name:'Ismael', last_name:'Everett',email: 'user11@testmail.com', phone: 1111111131},
-            {username:'NattheCat', password:'dummypassword', first_name:'Natalie', last_name:'Felonius',email: 'user12@testmail.com', phone: 1111111141},
-            {username:'QuizicallyYours', password:'dummypassword', first_name:'Pat', last_name:'Sajak',email: 'user13@testmail.com', phone: 1111111151},
-            {username:'Boomer-Sooner-12', password:'dummypassword', first_name:'Bob', last_name:'Stoops',email: 'user14@testmail.com', phone: 1111111161},
-            {username:'PistolsFiring', password:'dummypassword', first_name:'Michael', last_name:'Gundy',email: 'user15@testmail.com', phone: 1111111171}
+            {username:'SmarmyTerrier', password:'dummypassword', first_name:'John', last_name:'Doe',email: 'user1@testmail.com',  phone: 1111111111, admin: false},
+            {username:'MiyagiSan14', password:'dummypassword', first_name:'Tom', last_name:'Collins',email: 'user2@testmail.com', phone: 1111111112, admin: false},
+            {username:'TebCrux', password:'dummypassword', first_name:'Ted', last_name:'Cruz',email: 'user3@testmail.com', phone: 1111111113, admin: false},
+            {username:'JSeed2', password:'dummypassword', first_name:'Joseph', last_name:'Seed',email: 'user4@testmail.com', phone: 1111111114, admin: false},
+            {username:'BloodyBookworm', password:'dummypassword', first_name:'Bernie', last_name:'Sanders',email: 'user5@testmail.com', phone: 1111111115, admin: false},
+            {username:'punctuallyqueasy', password:'dummypassword', first_name:'Kamala', last_name:'Harris',email: 'user6@testmail.com', phone: 1111111116, admin: false},
+            {username:'Yearly_Helper', password:'dummypassword', first_name:'James', last_name:'Inhofe',email: 'user7@testmail.com', phone: 1111111117, admin: false},
+            {username:'LilCrunk', password:'dummypassword', first_name:'Joseph', last_name:'Biden',email: 'user8@testmail.com', phone: 1111111118, admin: false},
+            {username:'DavetheGoat', password:'dummypassword', first_name:'David', last_name:'Beckham',email: 'user9@testmail.com', phone: 1111111119, admin: false},
+            {username:'JustTim', password:'dummypassword', first_name:'Tim', last_name:'Sweeny',email: 'user10@testmail.com', phone: 1111111121, admin: false},
+            {username:'Froge37', password:'dummypassword', first_name:'Ismael', last_name:'Everett',email: 'user11@testmail.com', phone: 1111111131, admin: false},
+            {username:'NattheCat', password:'dummypassword', first_name:'Natalie', last_name:'Felonius',email: 'user12@testmail.com', phone: 1111111141, admin: false},
+            {username:'QuizicallyYours', password:'dummypassword', first_name:'Pat', last_name:'Sajak',email: 'user13@testmail.com', phone: 1111111151, admin: false},
+            {username:'Boomer-Sooner-12', password:'dummypassword', first_name:'Bob', last_name:'Stoops',email: 'user14@testmail.com', phone: 1111111161, admin: false},
+            {username:'PistolsFiring', password:'dummypassword', first_name:'Michael', last_name:'Gundy',email: 'user15@testmail.com', phone: 1111111171, admin: false},
+            {username:'admin', password:'admin', first_name: 'admin', last_name: 'admin', email: 'admin@adminmail.com', phone: null, admin: 'TRUE' }
         ];
 
         const users = await Promise.all(usersToCreate.map(createUser));
@@ -215,7 +217,7 @@ async function createInitialProducts() {
         const products = await Promise.all(productsToCreate.map(createProductItem));
 
 		console.log('products created:');
-		console.log(products);
+		// console.log(products);
 		console.log('Finished creating products!');
     } catch (error) {
         console.error("Error creating products.");
