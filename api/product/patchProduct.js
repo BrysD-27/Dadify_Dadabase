@@ -13,7 +13,6 @@ productsRouter.patch('/:productId', async (req, res, next) => {
         console.error("Error updating product.");
         throw error;
     };
-    next();
 });
 
 module.exports = productsRouter

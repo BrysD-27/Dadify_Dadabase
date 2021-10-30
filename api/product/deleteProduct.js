@@ -12,7 +12,6 @@ productsRouter.delete('/:productId', async (req, res, next) => {
         console.error("Error deleting product item.");
         throw error
     };
-    next();
 });
 
 module.exports = productsRouter;
