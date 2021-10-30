@@ -20,7 +20,6 @@ usersRouter.post('/register', async(req, res, next) => {
         throw('Username or Email already in use.')
     } catch (error) {
         console.error(error);
-
     }
 });
 
@@ -52,7 +51,7 @@ usersRouter.get(`/:username`, async(req, res, next) => {
         throw error;
     }
 
-})
+});
 
 usersRouter.get(`/`, async(req,res,next) => {
     try {
@@ -61,7 +60,7 @@ usersRouter.get(`/`, async(req,res,next) => {
     } catch (error) {
         console.error(error)
     }
-})
+});
 
 // usersRouter.patch('/:username', async(req, res, next) => {
 //         const {username} = req.body.username;
