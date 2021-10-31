@@ -6,7 +6,7 @@ async function updateProductItem({product_id, name, description, price}) {
             UPDATE product
             SET 
             name = $2, description = $3, price = $4
-            WHERE id = $1
+            WHERE id = $1;
         `, [product_id, name, description, price]);
 
         return product;
