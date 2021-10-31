@@ -14,7 +14,7 @@ const JWT_SECRET = require('./secret');
 
 
 usersRouter.post('/register', async(req, res, next) => {
-    const { username, email } = req.body;
+    const { username } = req.body;
     try {
         const _user = await getUserByUsername(username);
         if(_user){
