@@ -7,7 +7,6 @@ async function updateProductItem({product_id, name, description, price}) {
             SET 
             name = $2, description = $3, price = $4
             WHERE id = $1
-            RETURNING *;
         `, [product_id, name, description, price]);
 
         return product;
