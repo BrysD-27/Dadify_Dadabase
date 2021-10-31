@@ -7,6 +7,7 @@ productsRouter.patch('/:productId', async (req, res, next) => {
     try {
         const patchedProduct = await updateProductItem({productId, name, description, price});
         res.send({message: 'Success', patchedProduct})
+        console.log('PATCHED PRODUCT:', patchedProduct);
         next();
 
     } catch (error) {
