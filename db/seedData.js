@@ -174,7 +174,7 @@ async function createInitialProducts() {
     console.log('Creating initial list of products...')
     try {
         const productsToCreate= [
-            {name:'Khaki Fanny Pack', description:'The Khaki Fanny Pack Every Dad Needs! Hold your phone, keys, wallet, and SNACKS!', sku:'001', category_id:000001, inventory_id:1, price:09.99, image: "https://www.ebay.co.uk/itm/313606562952"},
+            {name:'Khaki Fanny Pack', description:'The Khaki Fanny Pack Every Dad Needs! Hold your phone, keys, wallet, and SNACKS!', sku:'001', category_id:000001, inventory_id:1, price:09.99, image: "khaki_fanny_pack.jpg"},
             {name:'Oakley Sunglasses', description:'Block Out The Haters!', sku:'002', category_id:000002, inventory_id:2, price:10.50, image: "oakley_sunglasses.jpeg"},
             {name:'"Kiss the Cook" apron', description:"Get Cookin' With A Spatula In One Hand, And A Beer In The Other!", sku:'003', category_id:000003, inventory_id:3, price:11.32, image: "kiss_the_cook_apron.jpg"},
             {name:'Neon Budweiser Sign', description:'placeholder_description', sku:'004', category_id:000004, inventory_id:4, price:08.38},
@@ -218,7 +218,7 @@ async function createInitialProducts() {
         const products = await Promise.all(productsToCreate.map(createProductItem));
 
 		console.log('products created:');
-		// console.log(products);
+		console.log(products);
 		console.log('Finished creating products!');
     } catch (error) {
         console.error("Error creating products.");
