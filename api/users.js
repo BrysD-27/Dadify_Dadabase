@@ -17,10 +17,10 @@ usersRouter.post('/register', async(req, res, next) => {
     const {username, password, email} = req.body;
     try {
         const _user = await getUserByUsername(username);
-        // if (_user) {
-        //     res.send({message: 'Username already taken, please select another!'});
-        //     next();
-        // }
+        if (_user) {
+            res.send({message: 'Username already taken, please select another!'});
+            next();
+        }
         // if (_user.email) {
         //     res.send({message:'An account with this email is already in use. Maybe you wrote down the info somewhere?'});
         //     next();
