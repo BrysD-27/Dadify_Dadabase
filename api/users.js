@@ -19,7 +19,7 @@ usersRouter.post('/register', async(req, res, next) => {
         const _user = await getUserByUsername(username);
         if(_user){
             res.send({message: 'Username already taken, please select another!'})
-        } else if (_user.email){
+        }if (_user.email){
             res.send({message:'An account with this email is already in use. Maybe you wrote down the info somewhere?'})
         } 
         const user = await createUser({username, password, email});
