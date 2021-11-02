@@ -1,15 +1,15 @@
 const client = require('../client');
 const bcrypt = require('bcrypt');
 
-async function createUser({username, password, first_name, last_name, email, phone}) {
+async function createUser({username, password, first_name, last_name, email, phone, admin}) {
     const SALT_COUNT = 10;  
     try {
         const hashPassword = bcrypt.hashSync(password, SALT_COUNT);
         const {rows: [createdUser]} = await client.query(`
-            INSERT INTO users(username, password, first_name, last_name, email, phone)
-            VALUES ($1, $2, $3, $4, $5, $6)
+            INSERT INTO users(username, password, first_name, last_name, email, phone, admin)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING *;
-        `, [username, hashPassword, first_name, last_name, email, phone]);
+        `, [username, hashPassword, first_name, last_name, email, phone, admin]);
 
         return createdUser;
     } catch (error) {
@@ -70,10 +70,35 @@ async function getUser({username, password}) {
     }
 }
 
+async function updateUser({username, password, first_name, last_name, email, phone, admin, id}) {
+    try {
+        const {rows: [user]} = await client.query(`
+            UPDATE users
+            SET
+                username = $1, 
+                password = $2, 
+                first_name = $3, 
+                last_name = $4, 
+                email = $5, 
+                phone = $6, 
+                admin = $7
+                WHERE id = $8
+                RETURNING *;
+        `, [username, password, first_name, last_name, email, phone, admin, id])
+
+        return user;
+
+    } catch (error) {
+        console.error('Error updating user')
+        throw error;
+    }
+}
+
 module.exports = {
     createUser, 
     getUserByUsername, 
     getUserById,
     getUser,
-    getAllUsers
+    getAllUsers,
+    updateUser
 }
