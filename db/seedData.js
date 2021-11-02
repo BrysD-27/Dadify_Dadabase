@@ -126,7 +126,7 @@ async function createInitialUsers() {
             {username:'QuizicallyYours', password:'dummypassword', first_name:'Pat', last_name:'Sajak',email: 'user13@testmail.com', phone: 1111111151, admin: false},
             {username:'Boomer-Sooner-12', password:'dummypassword', first_name:'Bob', last_name:'Stoops',email: 'user14@testmail.com', phone: 1111111161, admin: false},
             {username:'PistolsFiring', password:'dummypassword', first_name:'Michael', last_name:'Gundy',email: 'user15@testmail.com', phone: 1111111171, admin: false},
-            {username:'admin', password:'admin', first_name: 'admin', last_name: 'admin', email: 'admin@adminmail.com', phone: null, admin: 'TRUE' }
+            {username:'admin', password:'admin', first_name: 'admin', last_name: 'admin', email: 'admin@adminmail.com', phone: null, admin: true}
         ];
 
         const users = await Promise.all(usersToCreate.map(createUser));
