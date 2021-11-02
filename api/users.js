@@ -21,6 +21,7 @@ usersRouter.post('/register', async(req, res, next) => {
             res.send({message: 'Username already taken, please select another!'});
             next();
         }
+        console.log('_USER IS:', _user);
         // if (_user.email) {
         //     res.send({message:'An account with this email is already in use. Maybe you wrote down the info somewhere?'});
         //     next();
