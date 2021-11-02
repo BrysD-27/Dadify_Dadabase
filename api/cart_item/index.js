@@ -1,6 +1,6 @@
 const cart_itemRouter = require('express').Router();
 
-const {addItemToCart, getCartItemById, updateCartItem, destroyCartItem, getItemsByCartId, clearCart} = require('../../db/cart_items/index');
+const {addItemToCart, updateCartItem, destroyCartItem, getItemsByCartId, clearCart} = require('../../db/cart_items/index');
 
 cart_itemRouter.get('/:cart_id', async (req, res, next) => {
     const id = req.params.cart_id;

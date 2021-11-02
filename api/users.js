@@ -5,9 +5,7 @@ const jwt = require('jsonwebtoken');
 const {     
     createUser, 
     getUserByUsername, 
-    getUserById,
     getAllUsers,
-    updateUser,
     getUser} = require('../db/user/');
 
 const {createCart, getCartAndItemsByUser} = require('../db/cart/index');
@@ -24,12 +22,6 @@ usersRouter.post('/register', async(req, res, next) => {
             res.send({message: 'Email or Username already taken, please try again!'});
             next();
         }
-        console.log('_USER IS:', _user);
-        // if (_user.email) {
-        //     res.send({message:'An account with this email is already in use. Maybe you wrote down the info somewhere?'});
-        // }
-        //     next();
-        // } 
         const user = await createUser({username, password, email});
         const token = jwt.sign({
             id: user.id, 
@@ -65,13 +57,12 @@ usersRouter.post('/login', async(req, res, next) => {
         res.send({message: 'Login successful', token, cart, id: user.id, isAdmin: user.admin});
          throw('Incorrect Username or Password!')
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 });
 
 usersRouter.get(`/:username`, async(req, res, next) => {
     try {
-        console.log(req.params.username);
         const chosenUser = await getUserByUsername(req.params.username);
         res.send(chosenUser)
     } catch (error) {
@@ -88,36 +79,5 @@ usersRouter.get(`/`, async(req,res,next) => {
         console.error(error)
     }
 });
-
-// usersRouter.patch('/:username', async(req, res, next) => {
-//         const {username} = req.body.username;
-//         const { 
-//             id,
-//             username,
-//             password,
-//             first_name,
-//             last_name,
-//             email,
-//             phone,
-//             admin
-//          } = req.body;
-
-//     try {
-//         const patchedUser = await updateUser({
-//             username, 
-//             password,
-//             first_name,
-//             last_name,
-//             email,
-//             phone,
-//             admin, 
-//             id});
-//         res.send(patchedUser)
-//     } catch (error) {
-//         console.error('Error updating user')
-//         throw error;    
-//     }
-
-// });
 
 module.exports = usersRouter;
