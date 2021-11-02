@@ -26,7 +26,7 @@ usersRouter.post('/register', async(req, res, next) => {
         //     next();
         // } 
         const user = await createUser({username, password, email});
-        res.send(user)
+        res.send({user, message: "register successful."});
     } catch (error) {
         console.error(error);
     }
