@@ -82,7 +82,7 @@ usersRouter.get(`/:username`, async(req, res, next) => {
 
 usersRouter.get(`/`, async(req,res,next) => {
     try {
-        const userlist = await getAllUsers();
+        const userlist = await getAllUsers({first_name, last_name, phone});
         res.send(userlist);
     } catch (error) {
         console.error(error)
