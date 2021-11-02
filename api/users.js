@@ -36,10 +36,10 @@ usersRouter.post('/register', async(req, res, next) => {
             username: user.username
         }, JWT_SECRET);
 
-        const cartData = {user_id: user.id, total: 0};
+        const cartData = {userId: user.id, total: 0};
 
         const cart = await createCart(cartData);
-        
+
         res.send({user, token, cart, message: "register successful."});
     } catch (error) {
         console.error(error);
