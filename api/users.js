@@ -10,7 +10,7 @@ const {
     updateUser,
     getUser} = require('../db/user/');
 
-const {createCart} = require('../db/cart/index');
+const {createCart, getCartAndItemsByUser} = require('../db/cart/index');
 
 const JWT_SECRET = require('./secret');
 
@@ -21,7 +21,7 @@ usersRouter.post('/register', async(req, res, next) => {
     try {
         const _user = await getUserByUsername(username);
         if (_user) {
-            res.send({message: 'Username already taken, please select another!'});
+            res.send({message: 'Email or Username already taken, please try again!'});
             next();
         }
         console.log('_USER IS:', _user);
@@ -58,7 +58,11 @@ usersRouter.post('/login', async(req, res, next) => {
             id: user.id, 
             username: user.username
         }, JWT_SECRET);
-        res.send({message: 'Login successful', token, id: user.id, isAdmin: user.admin});
+
+        const userId = user.id;
+        const cart = await getCartAndItemsByUser(userId);
+
+        res.send({message: 'Login successful', token, cart, id: user.id, isAdmin: user.admin});
          throw('Incorrect Username or Password!')
     } catch (error) {
         console.log(error);

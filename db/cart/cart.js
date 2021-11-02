@@ -31,7 +31,12 @@ async function getCartAndItemsByUser(userId) {
 			JOIN cart_item ON product_id = product.id
 			WHERE cart_id = ${cart.id};
 		`);
-		cart.items = items;
+		if (items) {
+			cart.items = items;
+		} else {
+			cart.items = []
+		}
+		// cart.items = items;
 		return cart;
 	} catch (error) {
 		throw error;
