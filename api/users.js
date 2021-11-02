@@ -28,7 +28,11 @@ usersRouter.post('/register', async(req, res, next) => {
         //     next();
         // } 
         const user = await createUser({username, password, email});
-        res.send({user, message: "register successful."});
+        const token = jwt.sign({
+            id: user.id, 
+            username: user.username
+        }, JWT_SECRET);
+        res.send({user, token, message: "register successful."});
     } catch (error) {
         console.error(error);
     }
