@@ -1,17 +1,18 @@
 const client = require("../../client");
 
-async function createProductItem({name, description, sku, price}) {
+async function createProductItem({name, description, sku, price, image}) {
     try {
         const {rows:[productItem]} = await client.query(`
             INSERT INTO product (
                 name, 
                 description,
                 sku,
-                price
+                price,
+                image
             )
-            VALUES($1, $2, $3, $4)
+            VALUES($1, $2, $3, $4, $5)
             RETURNING *;
-        `, [name, description, sku, price]);
+        `, [name, description, sku, price, image]);
 
         return productItem;
     } catch (error) {
