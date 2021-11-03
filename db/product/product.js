@@ -1,6 +1,3 @@
-/* ----- PRODUCT CATEGORIES ----- */
-// const createProductCategory = require("./productCategories/createProductCategory.js");
-
 /* ----- PRODUCT ITEMS ----- */
 const createProductItem = require("./productItems/createProductItem.js");
 const deleteProductItem = require("./productItems/deleteProductItem.js");

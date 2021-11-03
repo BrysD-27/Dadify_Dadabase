@@ -19,5 +19,3 @@ productsRouter.delete('/:productId', async (req, res, next) => {
 });
 
 module.exports = productsRouter;
-
-// CHECK ON LINE 8 -> req.users.id -> right? or change to...?

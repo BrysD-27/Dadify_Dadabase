@@ -36,7 +36,6 @@ async function getCartAndItemsByUser(userId) {
 		} else {
 			cart.items = []
 		}
-		// cart.items = items;
 		return cart;
 	} catch (error) {
 		throw error;
