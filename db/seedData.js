@@ -7,6 +7,8 @@ const {
     addItemToCart,
 } = require('./index');
 
+
+
 async function dropTables() {
 	try {
 		console.log('Dropping All Tables...');
@@ -58,6 +60,7 @@ async function createTables() {
                 description VARCHAR,
                 sku VARCHAR(255),
                 price DECIMAL(10,2),
+                image VARCHAR(255),
                 created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 deleted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -123,7 +126,7 @@ async function createInitialUsers() {
             {username:'QuizicallyYours', password:'dummypassword', first_name:'Pat', last_name:'Sajak',email: 'user13@testmail.com', phone: 1111111151, admin: false},
             {username:'Boomer-Sooner-12', password:'dummypassword', first_name:'Bob', last_name:'Stoops',email: 'user14@testmail.com', phone: 1111111161, admin: false},
             {username:'PistolsFiring', password:'dummypassword', first_name:'Michael', last_name:'Gundy',email: 'user15@testmail.com', phone: 1111111171, admin: false},
-            {username:'admin', password:'admin', first_name: 'admin', last_name: 'admin', email: 'admin@adminmail.com', phone: null, admin: 'TRUE' }
+            {username:'admin', password:'admin', first_name: 'admin', last_name: 'admin', email: 'admin@adminmail.com', phone: null, admin: true }
         ];
 
         const users = await Promise.all(usersToCreate.map(createUser));
@@ -141,7 +144,21 @@ async function createInitialCart() {
 
         const cartsToCreate = [
             {userId: 1, total: 0.00 },
-            {userId: 2, total: 0.00 }
+            {userId: 2, total: 0.00 },
+            {userId: 3, total: 0.00 },
+            {userId: 4, total: 0.00 },
+            {userId: 5, total: 0.00 },
+            {userId: 6, total: 0.00 },
+            {userId: 7, total: 0.00 },
+            {userId: 8, total: 0.00 },
+            {userId: 9, total: 0.00 },
+            {userId: 10, total: 0.00 },
+            {userId: 11, total: 0.00 },
+            {userId: 12, total: 0.00 },
+            {userId: 13, total: 0.00 },
+            {userId: 14, total: 0.00 },
+            {userId: 15, total: 0.00 },
+            {userId: 16, total: 0.00 }
         ]
         const carts = await Promise.all(cartsToCreate.map(cart => createCart(cart)));
         console.log('Carts Created: ', carts)
@@ -173,51 +190,51 @@ async function createInitialProducts() {
     console.log('Creating initial list of products...')
     try {
         const productsToCreate= [
-            {name:'Khaki Fanny Pack', description:'placeholder_description', sku:'001', category_id:000001, inventory_id:1, price:09.99},
-            {name:'Oakley Sunglasses', description:'placeholder_description', sku:'002', category_id:000002, inventory_id:2, price:10.50},
-            {name:'"Kiss the Cook" apron', description:'placeholder_description', sku:'003', category_id:000003, inventory_id:3, price:11.32},
-            {name:'Neon Budweiser Sign', description:'placeholder_description', sku:'004', category_id:000004, inventory_id:4, price:08.38},
-            {name:'Vintage Updog', description:'placeholder_description', sku:'005', category_id:000005, inventory_id:5, price:100.00},
-            {name:'Cotton Tube Socks', description:'placeholder_description', sku:'006', category_id:000006, inventory_id:6, price:99.99},
-            {name:'White Newbalance Sneakers: Size 10', description:'placeholder_description', sku:'007', category_id:000007, inventory_id:7, price:30.00},
-            {name:'AC/DC Greatest Hits', description:'placeholder_description', sku:'008', category_id:000007, inventory_id:8, price:15.25},
-            {name:'Flannel Shirt', description:'placeholder_description', sku:'009', category_id:000007, inventory_id:9, price:18.24},
-            {name:'NFL regulation football', description:'placeholder_description', sku:'010', category_id:000010, inventory_id:10, price:19.93},
-            {name:'Novelty Dad Coozy', description:'placeholder_description', sku:'011', category_id:000011, inventory_id:11, price:19.94},
-            {name:'Grill Tongs', description:'placeholder_description', sku:'012', category_id:000012, inventory_id:12, price:19.95},
-            {name:'"The Big Lebowski" Blu-Ray edition', description:'placeholder_description', sku:'013', category_id:000013, inventory_id:13, price:19.57},
-            {name:'Jean Shorts: Size 34', description:'placeholder_description', sku:'014', category_id:000014, inventory_id:14, price:19.55},
-            {name:'Faux-leather belt', description:'placeholder_description', sku:'015', category_id:000015, inventory_id:15, price:42.56},
-            {name:'Cordless electric drill', description:'placeholder_description', sku:'016', category_id:000016, inventory_id:16, price:78.25},
-            {name:'Shop-Vac', description:'placeholder_description', sku:'017', category_id:000017, inventory_id:17, price:45.00},
-            {name:'Red metal toolbox', description:'placeholder_description', sku:'018', category_id:000017, inventory_id:18, price:61.00},
-            {name:'Ken Burns "Baseball"', description:'placeholder_description', sku:'019', category_id:000017, inventory_id:19, price:25.32},
-            {name:'Ken Burns "The Civil War"', description:'placeholder_description', sku:'020', category_id:000020, inventory_id:20, price:23.23},
-            {name:'Ken Burns "Frank Lloyd Wright"', description:'placeholder_description', sku:'021', category_id:000021, inventory_id:21, price:75.75},
-            {name:'Ken Burns "The Address"', description:'placeholder_description', sku:'022', category_id:000022, inventory_id:22, price:0.00},
-            {name:'Ken Burns "The War"', description:'placeholder_description', sku:'023', category_id:000023, inventory_id:23, price:43.22},
-            {name:'Ken Burns "Jazz"', description:'placeholder_description', sku:'024', category_id:000024, inventory_id:24, price:53.42},
-            {name:'Ken Burns "The Dust Bowl"', description:'placeholder_description', sku:'025', category_id:000025, inventory_id:25, price:36.43},
-            {name:'Golf Club Set', description:'placeholder_description', sku:'026', category_id:000026, inventory_id:26, price:43.42},
-            {name:'Gibson Les Paul', description:'placeholder_description', sku:'027', category_id:000027, inventory_id:27, price:21.66},
-            {name:'Gibson Flying V', description:'placeholder_description', sku:'028', category_id:000027, inventory_id:28, price:84.31},
-            {name:'15-piece beard trimmer set', description:'placeholder_description', sku:'029', category_id:000027, inventory_id:29, price:13.13},
-            {name:'"Silk" tie', description:'placeholder_description', sku:'030', category_id:000030, inventory_id:30, price:4.56},
-            {name:'Silk tie', description:'placeholder_description', sku:'031', category_id:000031, inventory_id:31, price:95.05},
-            {name:'Money clip', description:'placeholder_description', sku:'032', category_id:000032, inventory_id:32, price:440.43},
-            {name:'Steel-toe boots', description:'placeholder_description', sku:'033', category_id:000033, inventory_id:33, price:15.21},
-            {name:'Octodad: Dadliest Catch', description:'placeholder_description', sku:'034', category_id:000034, inventory_id:34, price:20.32},
-            {name:'Wooden novelty coasters', description:'placeholder_description', sku:'035', category_id:000035, inventory_id:35, price:53.23},
-            {name:'Whiskey Stones: Set of 6', description:'placeholder_description', sku:'036', category_id:000036, inventory_id:36, price:64.23},
-            {name:'"#1 Dad" coffee mug', description:'placeholder_description', sku:'037', category_id:000037, inventory_id:37, price:57.11},
-            {name:'"#2 Dad" coffee mug', description:'placeholder_description', sku:'038', category_id:000037, inventory_id:38, price:43.44},
-            {name:'"Dad" coffee mug', description:'placeholder_description', sku:'039', category_id:000037, inventory_id:39, price:12.21},
-            {name:'"Hi Hungry, I\'m Dad: 1001 Dad Jokes"', description:'placeholder_description', sku:'040', category_id:000040, inventory_id:40, price:13.41}
+            {name:'Khaki Fanny Pack', description:'placeholder_description', image: "khaki_fanny_pack.jpg", sku:'001', category_id:000001, inventory_id:1, price:09.99},
+            {name:'Oakley Sunglasses', description:'placeholder_description', image: "oakley_sunglasses.jpeg", sku:'002', category_id:000002, inventory_id:2, price:10.50},
+            {name:'"Kiss the Cook" apron', description:'placeholder_description', image: "kiss_the_cook_apron.jpg", sku:'003', category_id:000003, inventory_id:3, price:11.32},
+            {name:'Neon Budweiser Sign', description:'placeholder_description', image: "neon_budweiser_sign.jpg", sku:'004', category_id:000004, inventory_id:4, price:08.38},
+            {name:'Vintage Updog', description:'placeholder_description', image: "vintage_updog.jpg", sku:'005', category_id:000005, inventory_id:5, price:100.00},
+            {name:'Cotton Tube Socks', description:'placeholder_description', image: "cotton_tube_socks.jpg", sku:'006', category_id:000006, inventory_id:6, price:99.99},
+            {name:'White Newbalance Sneakers: Size 10', description:'placeholder_description', image: "white_newbalance_sneakers.jpg", sku:'007', category_id:000007, inventory_id:7, price:30.00},
+            {name:'AC/DC Greatest Hits', description:'placeholder_description', image: "acdc_greatest_hits.jpg", sku:'008', category_id:000007, inventory_id:8, price:15.25},
+            {name:'Flannel Shirt', description:'placeholder_description', image: "flannel_shirt.jpeg", sku:'009', category_id:000007, inventory_id:9, price:18.24},
+            {name:'NFL regulation football', description:'placeholder_description', image: "nfl_regulation_football.jpg", sku:'010', category_id:000010, inventory_id:10, price:19.93},
+            {name:'Novelty Dad Coozy', description:'placeholder_description', image: "novelty_dad_coozy.jpg", sku:'011', category_id:000011, inventory_id:11, price:19.94},
+            {name:'Grill Tongs', description:'placeholder_description', image: "grill_tongs.jpg", sku:'012', category_id:000012, inventory_id:12, price:19.95},
+            {name:'"The Big Lebowski" Blu-Ray edition', description:'placeholder_description', image: "lebowski_blu_ray.jpg", sku:'013', category_id:000013, inventory_id:13, price:19.57},
+            {name:'Jean Shorts: Size 34', description:'placeholder_description', image: "jean_shorts.jpg", sku:'014', category_id:000014, inventory_id:14, price:19.55},
+            {name:'Faux-leather belt', description:'placeholder_description', image: "faux_leather_belt.jpeg", sku:'015', category_id:000015, inventory_id:15, price:42.56},
+            {name:'Cordless electric drill', description:'placeholder_description', image: "cordless_electric_drill.jpg", sku:'016', category_id:000016, inventory_id:16, price:78.25},
+            {name:'Shop-Vac', description:'placeholder_description', image: "shop_vac.jpg", sku:'017', category_id:000017, inventory_id:17, price:45.00},
+            {name:'Red metal toolbox', description:'placeholder_description', image: "red_metal_toolbox.jpg", sku:'018', category_id:000017, inventory_id:18, price:61.00},
+            {name:'Ken Burns "Baseball"', description:'placeholder_description', image: "ken_burns_baseball.jpg", sku:'019', category_id:000017, inventory_id:19, price:25.32},
+            {name:'Ken Burns "The Civil War"', description:'placeholder_description', image: "ken_burns_civil_war.jpg", sku:'020', category_id:000020, inventory_id:20, price:23.23},
+            {name:'Ken Burns "Frank Lloyd Wright"', description:'placeholder_description', image: "ken_burns_frank_lloyd_wright.jpg", sku:'021', category_id:000021, inventory_id:21, price:75.75},
+            {name:'Ken Burns "The Address"', description:'placeholder_description', image: "ken_burns_the_address.jpg", sku:'022', category_id:000022, inventory_id:22, price:0.00},
+            {name:'Ken Burns "The War"', description:'placeholder_description', image: "ken_burns_the_war.jpg", sku:'023', category_id:000023, inventory_id:23, price:43.22},
+            {name:'Ken Burns "Jazz"', description:'placeholder_description', image: "ken_burns_jazz.jpg", sku:'024', category_id:000024, inventory_id:24, price:53.42},
+            {name:'Ken Burns "The Dust Bowl"', description:'placeholder_description', image: "ken_burns_dust_bowl.jpg", sku:'025', category_id:000025, inventory_id:25, price:36.43},
+            {name:'Golf Club Set', description:'placeholder_description', image: "golf_club_set.jpg", sku:'026', category_id:000026, inventory_id:26, price:43.42},
+            {name:'Gibson Les Paul', description:'placeholder_description', image: "gibson_les_paul.jpg", sku:'027', category_id:000027, inventory_id:27, price:21.66},
+            {name:'Gibson Flying V', description:'placeholder_description', image: "gibson_flying_v.jpeg", sku:'028', category_id:000027, inventory_id:28, price:84.31},
+            {name:'15-piece beard trimmer set', description:'placeholder_description', image: "beard_trimmer_set.jpg", sku:'029', category_id:000027, inventory_id:29, price:13.13},
+            {name:'"Silk" tie', description:'placeholder_description', image: "silk_tie.jpg", sku:'030', category_id:000030, inventory_id:30, price:4.56},
+            {name:'Silk tie', description:'placeholder_description', image: "silk_tie_two.jpg", sku:'031', category_id:000031, inventory_id:31, price:95.05},
+            {name:'Money clip', description:'placeholder_description', image: "money_clip.jpg", sku:'032', category_id:000032, inventory_id:32, price:440.43},
+            {name:'Steel-toe boots', description:'placeholder_description', image: "steel_toe_boots.jpg", sku:'033', category_id:000033, inventory_id:33, price:15.21},
+            {name:'Octodad: Dadliest Catch', description:'placeholder_description', image: "octodad_dadliest_catch.jpg", sku:'034', category_id:000034, inventory_id:34, price:20.32},
+            {name:'Wooden novelty coasters', description:'placeholder_description', image: "novelty_coasters.jpg", sku:'035', category_id:000035, inventory_id:35, price:53.23},
+            {name:'Whiskey Stones: Set of 6', description:'placeholder_description', image: "whiskey_stones.jpg", sku:'036', category_id:000036, inventory_id:36, price:64.23},
+            {name:'"#1 Dad" coffee mug', description:'placeholder_description', image: "dad_coffee_mug.jpg", sku:'037', category_id:000037, inventory_id:37, price:57.11},
+            {name:'"#2 Dad" coffee mug', description:'placeholder_description',image: "dad_coffee_mug_two.jpg", sku:'038', category_id:000037, inventory_id:38, price:43.44},
+            {name:'"Dad" coffee mug', description:'placeholder_description', image: "dad_coffee_mug_three.jpg", sku:'039', category_id:000037, inventory_id:39, price:12.21},
+            {name:'"Hi Hungry, I\'m Dad: 1001 Dad Jokes"', description:'placeholder_description', image: "dad_joke_book.jpg", sku:'040', category_id:000040, inventory_id:40, price:13.41}
         ]
         const products = await Promise.all(productsToCreate.map(createProductItem));
 
 		console.log('products created:');
-		// console.log(products);
+		console.log(products);
 		console.log('Finished creating products!');
     } catch (error) {
         console.error("Error creating products.");
