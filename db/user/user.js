@@ -41,6 +41,19 @@ async function getUserByUsername(username) {
     }
 }
 
+async function getUserByEmail(email) {
+    try {
+        const {rows: [user]} = await client.query(`
+            SELECT *
+            FROM users
+            WHERE email=$1;
+        `, [email]);
+        return user;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function getUserById(id) {
     try {
         const {rows: [user]} = await client.query(`
@@ -100,5 +113,6 @@ module.exports = {
     getUserById,
     getUser,
     getAllUsers,
-    updateUser
+    updateUser,
+    getUserByEmail
 }

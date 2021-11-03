@@ -6,7 +6,9 @@ const {
     createUser, 
     getUserByUsername, 
     getAllUsers,
-    getUser} = require('../db/user/');
+    getUser,
+    getUserByEmail
+} = require('../db/user/');
 
 const {createCart, getCartAndItemsByUser} = require('../db/cart/index');
 
@@ -20,6 +22,11 @@ usersRouter.post('/register', async(req, res, next) => {
         const _user = await getUserByUsername(username);
         if (_user) {
             res.send({message: 'Email or Username already taken, please try again!'});
+            next();
+        }
+        const _email = await getUserByEmail(email);
+        if (_email) {
+            res.send({message: 'This Email is already registered, please try again!'});
             next();
         }
         const user = await createUser({username, password, email});
