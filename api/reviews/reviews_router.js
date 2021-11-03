@@ -4,7 +4,6 @@ const {
     deleteReview,
     getAllReviews,
     getReviewById,
-    getReviewsByUsername,
     updateReview
 } = require('../../db/reviews/reviews');
 
